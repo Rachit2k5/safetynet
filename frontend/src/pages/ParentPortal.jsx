@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import MapView from '../components/MapView';
 import { apiPost, apiGet, apiPut } from '../services/api';
 
 export default function ParentPortal() {
+  const navigate = useNavigate();
   const [parentToken, setParentToken] = useState(() => localStorage.getItem('sr_parent_token') || '');
   const [pin, setPin] = useState('');
   const [error, setError] = useState(null);
@@ -102,6 +104,14 @@ export default function ParentPortal() {
   if (!parentToken || !dashboardData) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-screen hero-gradient text-center">
+        <div className="w-full max-w-md mb-4 flex justify-start">
+          <button
+            onClick={() => navigate('/')}
+            className="bg-slate-900/90 hover:bg-slate-800 text-cyan-300 px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700/80 shadow-lg transition-all flex items-center gap-1.5"
+          >
+            <span>←</span> Return to Traveler App
+          </button>
+        </div>
         <div className="glass-card p-8 border border-slate-700 max-w-md w-full shadow-2xl relative overflow-hidden">
           <div className="text-5xl mb-3" aria-hidden="true">🔒</div>
           <h1 className="text-2xl font-black text-white mb-1">Parent & Guardian Portal</h1>
@@ -169,12 +179,20 @@ export default function ParentPortal() {
           </p>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1"
-        >
-          <span>🔒</span> Lock Portal
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate('/')}
+            className="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1 shadow-md"
+          >
+            <span>←</span> Traveler App
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-950/70 hover:bg-red-900/80 text-red-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-red-800/60 transition-all flex items-center gap-1 shadow-md"
+          >
+            <span>🔒</span> Lock
+          </button>
+        </div>
       </header>
 
       {/* Live GPS Map View */}
