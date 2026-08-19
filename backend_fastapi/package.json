@@ -1,0 +1,8 @@
+{
+  "name": "saferoute-backend-fastapi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"const fs=require('fs'); if(!fs.existsSync('public')) fs.mkdirSync('public'); fs.writeFileSync('public/index.html', '<!DOCTYPE html><html><body><h1>SafeRoute FastAPI Server</h1></body></html>');\""
+  }
+}
