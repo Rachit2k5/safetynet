@@ -205,6 +205,48 @@ export default function RouteSelector() {
         </button>
       </form>
 
+      {/* Direct Click-to-Call Emergency Helpline Card */}
+      <div className="glass-card p-5 border border-red-500/40 shadow-xl space-y-3 mb-6">
+        <h3 className="text-sm font-bold text-white flex items-center justify-between">
+          <span className="flex items-center gap-2">
+            <span>📞</span> Emergency Helplines & Police Departments
+          </span>
+          <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded uppercase">Direct Click-to-Call</span>
+        </h3>
+        <p className="text-xs text-slate-400">
+          Tap any department button below to directly dial emergency services or police from your phone.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+          <a
+            href="tel:112"
+            className="p-3 bg-red-950/80 hover:bg-red-900 border border-red-500/80 rounded-xl text-center shadow-lg transition-all"
+          >
+            <span className="text-xs font-bold text-red-200 block">🚨 National Emergency</span>
+            <span className="text-base font-black text-white font-mono">112</span>
+            <span className="text-[10px] text-red-300 font-bold block mt-1">📞 Click to Call</span>
+          </a>
+
+          <a
+            href="tel:100"
+            className="p-3 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-xl text-center shadow-lg transition-all"
+          >
+            <span className="text-xs font-bold text-cyan-300 block">🚓 Police Control Room</span>
+            <span className="text-base font-black text-white font-mono">100</span>
+            <span className="text-[10px] text-cyan-400 font-bold block mt-1">📞 Click to Call</span>
+          </a>
+
+          <a
+            href="tel:1091"
+            className="p-3 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-xl text-center shadow-lg transition-all"
+          >
+            <span className="text-xs font-bold text-purple-300 block">👩 Women Safety Helpline</span>
+            <span className="text-base font-black text-white font-mono">1091</span>
+            <span className="text-[10px] text-purple-400 font-bold block mt-1">📞 Click to Call</span>
+          </a>
+        </div>
+      </div>
+
       <div className="space-y-6">
         {scores.map((item, index) => {
           const score = item.scoreData;

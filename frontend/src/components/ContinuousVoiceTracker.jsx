@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { apiPut, apiPost } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { captureLiveCameraPhoto } from '../utils/camera';
+import DirectCallModal from './DirectCallModal';
 
 export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) {
   const [isListening, setIsListening] = useState(false);
@@ -9,6 +10,9 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
   const [aiStatus, setAiStatus] = useState('Standby — Tap Start to Listen');
   const [lastAnalysis, setLastAnalysis] = useState(null);
   const [testInput, setTestInput] = useState('');
+  const [showDirectCallModal, setShowDirectCallModal] = useState(false);
+  const [activeKeyword, setActiveKeyword] = useState('');
+  const [activeSentence, setActiveSentence] = useState('');
   const { position } = useGeolocation();
   const recognitionRef = useRef(null);
   const isComponentMounted = useRef(true);
@@ -78,6 +82,10 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
         console.log('✓ AI Distress Photo Snapshot uploaded & dispatched to contacts via email');
       } catch (err) {}
     }
+
+    setActiveKeyword(detectedKeyword);
+    setActiveSentence(spokenText);
+    setShowDirectCallModal(true);
 
     if (onEmergencyDetected) {
       onEmergencyDetected(spokenText, aiReport);
@@ -290,6 +298,13 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
           </p>
         )}
       </div>
+
+      <DirectCallModal
+        isOpen={showDirectCallModal}
+        onClose={() => setShowDirectCallModal(false)}
+        detectedKeyword={activeKeyword}
+        spokenText={activeSentence}
+      />
     </div>
   );
 }
