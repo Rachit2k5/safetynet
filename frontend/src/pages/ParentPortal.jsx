@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapView from '../components/MapView';
-import { apiPost, apiGet } from '../services/api';
+import { apiPost, apiGet, apiPut } from '../services/api';
 
 export default function ParentPortal() {
   const [parentToken, setParentToken] = useState(() => localStorage.getItem('sr_parent_token') || '');
@@ -8,6 +8,9 @@ export default function ParentPortal() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
+  const [newPin, setNewPin] = useState('');
+  const [pinMsg, setPinMsg] = useState('');
+  const [pinErr, setPinErr] = useState('');
 
   useEffect(() => {
     if (parentToken) {
@@ -73,6 +76,26 @@ export default function ParentPortal() {
     setParentToken('');
     setDashboardData(null);
     localStorage.removeItem('sr_parent_token');
+  };
+
+  const handleUpdateParentPin = async (e) => {
+    e.preventDefault();
+    if (!newPin || newPin.trim().length < 4) {
+      setPinErr('Parent Security PIN must be at least 4 digits');
+      return;
+    }
+    setPinErr('');
+    setPinMsg('');
+    try {
+      await apiPut('/api/parent/pin', { pin: newPin.trim() }, {
+        headers: { Authorization: `Bearer ${parentToken}` }
+      });
+      setPinMsg('✓ Parent Security PIN updated successfully!');
+      setNewPin('');
+      setTimeout(() => setPinMsg(''), 4000);
+    } catch (err) {
+      setPinErr(err?.detail || err?.message || 'Failed to update Parent PIN.');
+    }
   };
 
   // Lock Screen View if not authenticated as parent
@@ -278,6 +301,33 @@ export default function ParentPortal() {
             <p className="text-xs text-slate-500 italic text-center py-4">No check-in logs recorded yet.</p>
           )}
         </div>
+      </div>
+
+      {/* Change Parent Security PIN Settings Card (Parent-Only Access) */}
+      <div className="glass-card p-5 border border-slate-700/80 shadow-xl space-y-3">
+        <h2 className="text-sm font-bold text-white flex items-center gap-2">
+          <span>🔒</span> Change Parent Security PIN
+        </h2>
+        <p className="text-xs text-slate-400">
+          Update your secret Parent Security PIN. Only parents logged into this portal can change this PIN.
+        </p>
+
+        {pinMsg && <div className="p-2.5 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-xs text-emerald-300 font-bold">{pinMsg}</div>}
+        {pinErr && <div className="p-2.5 bg-red-950/80 border border-red-500/50 rounded-xl text-xs text-red-300 font-bold">{pinErr}</div>}
+
+        <form onSubmit={handleUpdateParentPin} className="flex gap-2">
+          <input
+            type="password"
+            placeholder="Enter New Parent PIN (min 4 digits)"
+            value={newPin}
+            onChange={e => setNewPin(e.target.value)}
+            className="flex-1 bg-slate-900/90 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:ring-2 focus:ring-sr-info font-mono tracking-widest text-center"
+            required
+          />
+          <button type="submit" className="btn-info px-5 py-3 rounded-xl font-bold text-xs shadow-md whitespace-nowrap">
+            Update PIN
+          </button>
+        </form>
       </div>
     </div>
   );

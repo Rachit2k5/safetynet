@@ -257,16 +257,36 @@ class ParentLoginPayload(BaseModel):
     email: Optional[str] = None
     user_id: Optional[str] = None
 
-# --- Parent Portal Routes ---
-@app.put("/api/users/me/parent-pin")
-def set_parent_pin(payload: ParentPinPayload, user: dict = Depends(get_current_user)):
+@app.put("/api/parent/pin")
+def change_parent_pin(payload: ParentPinPayload, authorization: Optional[str] = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Parent authorization token required")
+    token = authorization.split(" ")[1]
+    try:
+        jwt_payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        user_id = jwt_payload.get("sub")
+    except Exception:
+        user_id = token
+
+    user = db["users"].find_one({"_id": user_id})
+    if not user:
+        users = list(db["users"].find({}, sort=[("created_at", -1)], limit=1))
+        if users:
+            user = users[0]
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Child profile not found")
+
     pin_clean = payload.pin.strip()
     if len(pin_clean) < 4:
-        raise HTTPException(status_code=400, detail="Parent PIN must be at least 4 digits")
+        raise HTTPException(status_code=400, detail="Parent Security PIN must be at least 4 digits")
 
     pin_hash = hash_password(pin_clean)
-    db["users"].update_one({"_id": user["_id"]}, {"$set": {"parent_pin_hash": pin_hash, "parent_pin_raw": pin_clean}})
-    return {"success": True, "message": "Parent Portal PIN updated successfully"}
+    db["users"].update_one(
+        {"_id": user["_id"]},
+        {"$set": {"parent_pin_hash": pin_hash, "parent_pin_raw": pin_clean}}
+    )
+    return {"success": True, "message": "Parent Portal Security PIN updated successfully"}
 
 @app.post("/api/parent/login")
 def parent_login(payload: ParentLoginPayload):

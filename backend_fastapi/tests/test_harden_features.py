@@ -129,22 +129,26 @@ def test_parent_portal_auth_and_evidence_stream():
     })
     token = res_reg.json()["token"]
     user_id = res_reg.json()["id"]
-    headers = {"Authorization": f"Bearer {token}"}
 
-    # 2. Set Parent PIN (e.g. 5678)
-    res_pin = client.put("/api/users/me/parent-pin", json={"pin": "5678"}, headers=headers)
+    # 2. Parent Login with default PIN (1234) -> 200
+    res_parent_init = client.post("/api/parent/login", json={"email": email, "pin": "1234"})
+    assert res_parent_init.status_code == 200
+    parent_token_init = res_parent_init.json()["parentToken"]
+
+    # 3. Change Parent PIN from Parent Portal (e.g. 5678) using parent_token_init
+    res_pin = client.put("/api/parent/pin", json={"pin": "5678"}, headers={"Authorization": f"Bearer {parent_token_init}"})
     assert res_pin.status_code == 200
 
-    # 3. Parent Login with wrong PIN -> 401
+    # 4. Parent Login with wrong PIN -> 401
     res_bad = client.post("/api/parent/login", json={"email": email, "pin": "9999"})
     assert res_bad.status_code == 401
 
-    # 4. Parent Login with correct PIN -> 200
+    # 5. Parent Login with new PIN (5678) -> 200
     res_parent = client.post("/api/parent/login", json={"email": email, "pin": "5678"})
     assert res_parent.status_code == 200
     parent_token = res_parent.json()["parentToken"]
 
-    # 5. Fetch Parent Dashboard Stream
+    # 6. Fetch Parent Dashboard Stream
     res_dash = client.get("/api/parent/dashboard", headers={"Authorization": f"Bearer {parent_token}"})
     assert res_dash.status_code == 200
     dash = res_dash.json()
