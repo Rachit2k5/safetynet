@@ -1,0 +1,10 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env
+.venv/
+uploads/photo_*.jpg
+uploads/evidence_*.webm
+uploads/db_store.json
+.DS_Store

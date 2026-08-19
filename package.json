@@ -1,0 +1,18 @@
+{
+  "name": "saferoute",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered personal safety companion PWA",
+  "workspaces": ["frontend", "backend"],
+  "scripts": {
+    "dev": "concurrently -n fe,be -c cyan,green \"npm run dev -w frontend\" \"npm run dev -w backend\"",
+    "build": "npm run build -w frontend && npm run build -w backend",
+    "test": "npm test -w backend",
+    "start": "npm start -w backend",
+    "seed": "npm run seed -w backend",
+    "generate-vapid": "npx web-push generate-vapid-keys --json"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
