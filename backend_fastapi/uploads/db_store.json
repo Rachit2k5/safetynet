@@ -127,6 +127,12 @@
       "name": "Traveler",
       "session_token": "c60424d7-426d-4a9b-b6d2-c640ce2d342e",
       "created_at": "2026-08-19T05:45:08.016725+00:00"
+    },
+    {
+      "_id": "662a25d4-d831-44a4-82dc-6dda7bffe553",
+      "name": "Traveler",
+      "session_token": "662a25d4-d831-44a4-82dc-6dda7bffe553",
+      "created_at": "2026-08-19T05:47:12.780859+00:00"
     }
   ],
   "contacts": [
@@ -153,6 +159,22 @@
       "email": "c1@example.com",
       "phone": "+12345",
       "created_at": "2026-08-19T05:42:22.618898+00:00"
+    },
+    {
+      "_id": "bb417c3e-bfcb-4878-bf89-59ef44dc4a5f",
+      "user_id": "662a25d4-d831-44a4-82dc-6dda7bffe553",
+      "name": "parth",
+      "email": "parthnarang9may@gmail.com",
+      "phone": "+1234567890",
+      "created_at": "2026-08-19T05:47:12.782608+00:00"
+    },
+    {
+      "_id": "e77079cc-cddc-4bd9-92ab-e53c2a660f53",
+      "user_id": "c60424d7-426d-4a9b-b6d2-c640ce2d342e",
+      "name": "parth",
+      "email": "parthnarang9may@gmail.com",
+      "phone": "+1234567890",
+      "created_at": "2026-08-19T05:48:03.823911+00:00"
     }
   ],
   "trips": [
@@ -200,6 +222,21 @@
       "share_token": "6fa1281b-93d8-4246-af0d-5bd5b55fabbf",
       "checkin_interval_ms": 60000,
       "started_at": "2026-08-19T05:42:22.635537+00:00"
+    },
+    {
+      "_id": "54c1d149-1a61-433c-ae38-8f50fc55cd8c",
+      "user_id": "c60424d7-426d-4a9b-b6d2-c640ce2d342e",
+      "origin": "Current Location (30.2514, 77.0445)",
+      "destination": "mullana (Current Location (30.2514, 77.0445) -> mullana (Main Lit Highway))",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "expected_arrival": "2026-08-19T06:18:31.858963+00:00",
+      "status": "panic",
+      "share_token": "e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
+      "checkin_interval_ms": 900000,
+      "started_at": "2026-08-19T05:48:31.858950+00:00"
     }
   ],
   "checkins": [
@@ -288,6 +325,41 @@
       "lat": 28.615,
       "lng": 77.21,
       "created_at": "2026-08-19T05:42:22.652901+00:00"
+    },
+    {
+      "_id": "6210e137-209f-4e8e-897e-41926084e002",
+      "trip_id": "54c1d149-1a61-433c-ae38-8f50fc55cd8c",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.251447632401877,
+      "lng": 77.04448573075719,
+      "created_at": "2026-08-19T05:48:54.573066+00:00",
+      "photo_url": "/uploads/photo_6210e137-209f-4e8e-897e-41926084e002_1787118538.jpg",
+      "evidence_url": "/uploads/evidence_6210e137-209f-4e8e-897e-41926084e002_1787118538.webm"
+    }
+  ],
+  "sent_emails": [
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/54c1d149-1a61-433c-ae38-8f50fc55cd8c/status/e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Panic Button Pressed",
+      "deliveredAt": "2026-08-19T05:48:54.574902+00:00",
+      "_id": "7fdc8ec1-1307-4dd0-9013-af817ccfbe33"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/54c1d149-1a61-433c-ae38-8f50fc55cd8c/status/e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
+      "photoUrl": "http://localhost:3001/uploads/photo_6210e137-209f-4e8e-897e-41926084e002_1787118538.jpg",
+      "audioUrl": "http://localhost:3001/uploads/evidence_6210e137-209f-4e8e-897e-41926084e002_1787118538.webm",
+      "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
+      "deliveredAt": "2026-08-19T05:48:58.681371+00:00",
+      "_id": "d73e1046-5c0e-46b7-853e-b28708c9414e"
     }
   ]
 }

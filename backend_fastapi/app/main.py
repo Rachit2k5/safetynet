@@ -82,7 +82,8 @@ class PanicPayload(BaseModel):
     aiReport: Optional[str] = None
 
 class EvidencePayload(BaseModel):
-    audioData: str
+    audioData: Optional[str] = None
+    imageData: Optional[str] = None
     shareToken: Optional[str] = None
 
 class AcknowledgePayload(BaseModel):
