@@ -22,6 +22,8 @@ export default function ParentPortal() {
   const [newPin, setNewPin] = useState('');
   const [pinMsg, setPinMsg] = useState('');
   const [pinErr, setPinErr] = useState('');
+  const [fetchingGps, setFetchingGps] = useState(false);
+  const [gpsSyncMsg, setGpsSyncMsg] = useState('');
 
   const fetchParentDashboard = async (token, showLoading = true) => {
     if (showLoading) setLoading(true);
@@ -216,9 +218,6 @@ export default function ParentPortal() {
   const activeTrip = dashboardData.activeTrip || {};
   const evidenceVault = dashboardData.evidenceVault || [];
   const checkinLogs = dashboardData.checkinLogs || [];
-
-  const [fetchingGps, setFetchingGps] = useState(false);
-  const [gpsSyncMsg, setGpsSyncMsg] = useState('');
 
   const handleFetchTravelerGps = async () => {
     setFetchingGps(true);
