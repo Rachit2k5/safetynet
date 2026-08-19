@@ -79,13 +79,17 @@ export default function Profile() {
 
   const handleAddContact = async (e) => {
     e.preventDefault();
-    if (!cName || !cEmail || !cPhone) return;
+    if (!cName || !cEmail) return;
     setError('');
+    let formattedEmail = cEmail.trim();
+    if (formattedEmail.endsWith('.')) {
+      formattedEmail = formattedEmail.slice(0, -1) + '.com';
+    }
     try {
       const res = await apiPost(`/api/users/${user.id}/contacts`, {
-        name: cName,
-        email: cEmail,
-        phone: cPhone
+        name: cName.trim(),
+        email: formattedEmail,
+        phone: cPhone.trim() || '+1234567890'
       });
       setContacts([...contacts, res]);
       setCName('');
@@ -94,7 +98,7 @@ export default function Profile() {
       setSuccessMsg('✓ Trusted contact added!');
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
-      setError('Failed to add contact.');
+      setError(err?.detail || err?.message || 'Failed to add contact.');
     }
   };
 
@@ -212,7 +216,7 @@ export default function Profile() {
               <input type="text" placeholder="Contact Name (e.g. Alex)" value={cName} onChange={e => setCName(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" required />
               <input type="email" placeholder="Email Address (e.g. alex@example.com)" value={cEmail} onChange={e => setCEmail(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" required />
             </div>
-            <input type="tel" placeholder="Phone Number (e.g. +123456789)" value={cPhone} onChange={e => setCPhone(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" required />
+            <input type="tel" placeholder="Phone Number (Optional)" value={cPhone} onChange={e => setCPhone(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" />
             <button type="submit" className="btn-info w-full py-2.5 rounded-xl font-bold text-xs shadow-lg">
               + Add Trusted Contact
             </button>
