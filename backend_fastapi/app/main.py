@@ -346,7 +346,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
 
     if payload.imageData:
         try:
-            img_clean = re.sub(r'^data:image/[a-z0-9]+;base64,', '', payload.imageData)
+            img_clean = payload.imageData.split(",", 1)[1] if "," in payload.imageData else payload.imageData
             img_clean += '=' * (-len(img_clean) % 4)
             img_name = f"photo_{alert_id}_{int(time.time())}.jpg"
             img_path = os.path.join("uploads", img_name)
@@ -358,7 +358,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
 
     if payload.audioData:
         try:
-            aud_clean = re.sub(r'^data:(audio|video)/[a-z0-9]+;base64,', '', payload.audioData)
+            aud_clean = payload.audioData.split(",", 1)[1] if "," in payload.audioData else payload.audioData
             aud_clean += '=' * (-len(aud_clean) % 4)
             aud_name = f"evidence_{alert_id}_{int(time.time())}.webm"
             aud_path = os.path.join("uploads", aud_name)
@@ -372,14 +372,22 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
         db["alerts"].update_one({"_id": alert_id}, {"$set": update_fields})
 
     # Dispatch email with photo & audio evidence link to trusted contacts
-    trip_id = alert["trip_id"]
-    trip = db["trips"].find_one({"_id": trip_id})
-    if trip and trip.get("user_id"):
-        user = db["users"].find_one({"_id": trip["user_id"]})
-        contacts = list(db["contacts"].find({"user_id": trip["user_id"]}))
+    trip_id = alert.get("trip_id")
+    trip = db["trips"].find_one({"_id": trip_id}) if trip_id else None
+    user_id = trip.get("user_id") if trip else None
+
+    # Fallback to latest active user if trip user is not bound
+    if not user_id:
+        users = list(db["users"].find({}, sort=[("created_at", -1)], limit=1))
+        if users:
+            user_id = users[0]["_id"]
+
+    if user_id:
+        user = db["users"].find_one({"_id": user_id})
+        contacts = list(db["contacts"].find({"user_id": user_id}))
         traveler_name = user.get("name", "Traveler") if user else "Traveler"
-        share_token = trip.get("share_token", "")
-        checkins = list(db["checkins"].find({"trip_id": trip_id}))
+        share_token = trip.get("share_token", "") if trip else ""
+        checkins = list(db["checkins"].find({"trip_id": trip_id})) if trip_id else []
         checkin_messages = [c.get("message", "") for c in checkins if c.get("message")]
         spoken_transcript = "\n".join(checkin_messages) if checkin_messages else "Emergency Photo & Audio Evidence Captured"
 
@@ -391,7 +399,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
                     to_email=c["email"],
                     contact_name=c["name"],
                     traveler_name=traveler_name,
-                    trip_id=trip_id,
+                    trip_id=trip_id or "emergency",
                     share_token=share_token,
                     lat=alert.get("lat", 28.6139),
                     lng=alert.get("lng", 77.2090),

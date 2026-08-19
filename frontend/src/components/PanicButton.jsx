@@ -35,7 +35,6 @@ export default function PanicButton({ tripId }) {
   const captureMediaEvidence = async (alertId, lat, lng) => {
     setIsCapturing(true);
     let imageData = null;
-    let audioData = null;
 
     // 1. Capture Real Camera Snapshot Photo
     try {
@@ -46,7 +45,12 @@ export default function PanicButton({ tripId }) {
       imageData = generateFallbackPhoto(lat, lng);
     }
 
-    // 2. Capture Audio Evidence Clip
+    // Immediately upload image evidence first!
+    if (imageData) {
+      await sendEvidencePayload(alertId, imageData, null);
+    }
+
+    // 2. Capture Audio Evidence Clip (3.5 seconds)
     try {
       if (navigator.mediaDevices && window.MediaRecorder) {
         const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -63,8 +67,8 @@ export default function PanicButton({ tripId }) {
           const reader = new FileReader();
           reader.readAsDataURL(blob);
           reader.onloadend = async () => {
-            audioData = reader.result;
-            await sendEvidencePayload(alertId, imageData, audioData);
+            const audioData = reader.result;
+            await sendEvidencePayload(alertId, null, audioData);
           };
         };
 
@@ -72,22 +76,20 @@ export default function PanicButton({ tripId }) {
         setTimeout(() => {
           if (mediaRecorder.state === 'recording') mediaRecorder.stop();
         }, 3500);
-      } else {
-        await sendEvidencePayload(alertId, imageData, null);
       }
     } catch (err) {
-      await sendEvidencePayload(alertId, imageData, null);
+      console.warn('Audio recording error/denied:', err);
+    } finally {
+      setIsCapturing(false);
     }
   };
 
   const sendEvidencePayload = async (alertId, imageData, audioData) => {
     try {
       await apiPost(`/api/alerts/${alertId}/evidence`, { imageData, audioData });
-      console.log('✓ Emergency photo & audio evidence successfully uploaded to backend');
+      console.log('✓ Emergency evidence successfully uploaded to backend');
     } catch (err) {
       console.error('Evidence upload error:', err);
-    } finally {
-      setIsCapturing(false);
     }
   };
 
@@ -98,20 +100,21 @@ export default function PanicButton({ tripId }) {
     const lat = position?.lat || 28.6139;
     const lng = position?.lng || 77.2090;
     const payload = { lat, lng, timestamp: new Date().toISOString() };
+    const targetTripId = tripId || 'emergency';
 
     let alertId = null;
 
     try {
-      const res = await apiPost(`/api/trips/${tripId}/panic`, payload);
+      const res = await apiPost(`/api/trips/${targetTripId}/panic`, payload);
       alertId = res.alertId;
       setStatus('success');
     } catch (e1) {
       try {
-        const res2 = await apiPut(`/api/trips/${tripId}/panic`, payload);
+        const res2 = await apiPut(`/api/trips/${targetTripId}/panic`, payload);
         alertId = res2.alertId;
         setStatus('success');
       } catch (e2) {
-        await queueAction({ type: 'POST', url: `/api/trips/${tripId}/panic`, body: payload });
+        await queueAction({ type: 'POST', url: `/api/trips/${targetTripId}/panic`, body: payload });
         setStatus('queued');
       }
     }
