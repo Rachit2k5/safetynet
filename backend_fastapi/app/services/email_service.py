@@ -15,6 +15,7 @@ def send_emergency_email(
     spoken_transcript: str = None,
     photo_url: str = None,
     evidence_url: str = None,
+    video_url: str = None,
     smtp_config: dict = None,
     base_url: str = "http://localhost:5174",
     backend_url: str = "http://localhost:3001"
@@ -22,6 +23,7 @@ def send_emergency_email(
     share_link = f"{base_url}/trip/{trip_id}/status/{share_token}"
     full_photo_url = f"{backend_url}{photo_url}" if photo_url else None
     full_audio_url = f"{backend_url}{evidence_url}" if evidence_url else None
+    full_video_url = f"{backend_url}{video_url}" if video_url else None
 
     subject = f"URGENT EMERGENCY ALERT: {traveler_name} needs immediate help!"
 
@@ -41,6 +43,13 @@ def send_emergency_email(
       <a href="{full_audio_url}" style="color:#38bdf8;font-weight:bold;font-size:14px;text-decoration:underline;">▶ Click Here to Listen to Recorded Audio Clip ({full_audio_url})</a>
     </div>
     ''' if full_audio_url else ''
+
+    video_html = f'''
+    <div style="margin-top:16px;background:#0f172a;padding:12px;border-radius:8px;border:1px solid #f43f5e;">
+      <p style="font-weight:bold;color:#f43f5e;margin:0 0 4px 0;">🎥 LIVE INCIDENT VIDEO RECORDING:</p>
+      <a href="{full_video_url}" style="color:#fb7185;font-weight:bold;font-size:14px;text-decoration:underline;">▶ Click Here to Watch Recorded Video Clip ({full_video_url})</a>
+    </div>
+    ''' if full_video_url else ''
 
     html_content = f"""
     <!DOCTYPE html>
@@ -71,6 +80,7 @@ def send_emergency_email(
 
         {photo_html}
         {audio_html}
+        {video_html}
 
         <a href="{share_link}" class="btn">🗺️ OPEN REAL-TIME LIVE GPS TRACKING MAP</a>
       </div>

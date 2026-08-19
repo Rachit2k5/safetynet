@@ -4,6 +4,7 @@ import { UserContext } from '../App';
 import { apiGet } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
 import EmergencyServices from '../components/EmergencyServices';
+import VideoCaptureButton from '../components/VideoCaptureButton';
 
 export default function Dashboard() {
   const { user } = useContext(UserContext);
@@ -106,6 +107,11 @@ export default function Dashboard() {
             <p className="text-[11px] text-slate-400 mt-0.5">Instant email & audio alert network</p>
           </div>
         </Link>
+      </div>
+
+      {/* Incident Camera Video Capture Option */}
+      <div className="mb-6">
+        <VideoCaptureButton tripId={activeTrip?.id} />
       </div>
 
       {/* Nearest Police Stations & Official Emergency Helplines */}

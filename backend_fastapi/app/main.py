@@ -332,9 +332,10 @@ def get_contact_status(trip_id: str, share_token: str):
 class EvidencePayload(BaseModel):
     audioData: Optional[str] = None
     imageData: Optional[str] = None
+    videoData: Optional[str] = None
     shareToken: Optional[str] = None
 
-# Alert Evidence Upload (Audio + Camera Snapshot Photo)
+# Alert Evidence Upload (Audio + Camera Snapshot Photo + Video Clip)
 @app.post("/api/alerts/{alert_id}/evidence")
 async def upload_evidence(alert_id: str, payload: EvidencePayload):
     alert = db["alerts"].find_one({"_id": alert_id})
@@ -368,10 +369,22 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
         except Exception as e:
             print(f"[WARN] Base64 audio decode error: {e}")
 
+    if payload.videoData:
+        try:
+            vid_clean = payload.videoData.split(",", 1)[1] if "," in payload.videoData else payload.videoData
+            vid_clean += '=' * (-len(vid_clean) % 4)
+            vid_name = f"video_{alert_id}_{int(time.time())}.webm"
+            vid_path = os.path.join("uploads", vid_name)
+            with open(vid_path, "wb") as f:
+                f.write(base64.b64decode(vid_clean))
+            update_fields["video_url"] = f"/uploads/{vid_name}"
+        except Exception as e:
+            print(f"[WARN] Base64 video decode error: {e}")
+
     if update_fields:
         db["alerts"].update_one({"_id": alert_id}, {"$set": update_fields})
 
-    # Dispatch email with photo & audio evidence link to trusted contacts
+    # Dispatch email with photo, audio & video evidence link to trusted contacts
     trip_id = alert.get("trip_id")
     trip = db["trips"].find_one({"_id": trip_id}) if trip_id else None
     user_id = trip.get("user_id") if trip else None
@@ -389,7 +402,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
         share_token = trip.get("share_token", "") if trip else ""
         checkins = list(db["checkins"].find({"trip_id": trip_id})) if trip_id else []
         checkin_messages = [c.get("message", "") for c in checkins if c.get("message")]
-        spoken_transcript = "\n".join(checkin_messages) if checkin_messages else "Emergency Photo & Audio Evidence Captured"
+        spoken_transcript = "\n".join(checkin_messages) if checkin_messages else "Emergency Photo, Audio & Video Evidence Captured"
 
         smtp_config = user.get("smtp_config") if user else None
 
@@ -406,6 +419,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
                     spoken_transcript=spoken_transcript,
                     photo_url=update_fields.get("photo_url") or alert.get("photo_url"),
                     evidence_url=update_fields.get("evidence_url") or alert.get("evidence_url"),
+                    video_url=update_fields.get("video_url") or alert.get("video_url"),
                     smtp_config=smtp_config
                 )
                 db["sent_emails"].insert_one(email_res)

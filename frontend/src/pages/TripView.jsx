@@ -4,6 +4,7 @@ import MapView from '../components/MapView';
 import CheckinTimer from '../components/CheckinTimer';
 import PanicButton from '../components/PanicButton';
 import ContinuousVoiceTracker from '../components/ContinuousVoiceTracker';
+import VideoCaptureButton from '../components/VideoCaptureButton';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useSocket } from '../hooks/useSocket';
 import { apiGet, apiPut, apiPost } from '../services/api';
@@ -108,6 +109,11 @@ export default function TripView() {
           center={position ? [position.lat, position.lng] : [trip.origin_lat || 28.6139, trip.origin_lng || 77.2090]} 
           currentLocation={position} 
         />
+      </div>
+
+      {/* Incident Camera Video Recorder */}
+      <div className="my-3">
+        <VideoCaptureButton tripId={trip.id} />
       </div>
 
       {/* Real-Time Continuous AI Voice Tracker with Timestamps */}

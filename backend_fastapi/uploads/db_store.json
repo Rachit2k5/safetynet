@@ -147,22 +147,10 @@
       "created_at": "2026-08-19T06:19:50.299728+00:00"
     },
     {
-      "_id": "cfabcd67-ff99-4d84-974e-010c22f2ae36",
-      "name": "Test Traveler",
-      "session_token": "9c46f6ec-07ed-464d-b26f-828f783bd4eb",
-      "created_at": "2026-08-19T06:33:59.255263+00:00"
-    },
-    {
-      "_id": "1a15003a-e1a0-4126-af3d-c22fbd1f9ba8",
-      "name": "Alice",
-      "session_token": "6e9d9492-a8b5-4b06-8f7c-67f45a24aad7",
-      "created_at": "2026-08-19T06:33:59.277678+00:00"
-    },
-    {
-      "_id": "cc73b184-fe37-4f0a-90d8-bfe5fce9fa41",
-      "name": "Bob",
-      "session_token": "f5fd7135-2e6c-470c-96b9-ebba1c49046a",
-      "created_at": "2026-08-19T06:33:59.316734+00:00"
+      "_id": "846d34dd-7b2e-49a8-a7d0-4d6054d6029d",
+      "name": "Video Test User",
+      "session_token": "26135bc9-8ceb-4b03-9dcc-b1d8da67c3a0",
+      "created_at": "2026-08-19T06:37:22.398430+00:00"
     }
   ],
   "contacts": [
@@ -221,14 +209,6 @@
       "email": "parent@test.com",
       "phone": "+1234567890",
       "created_at": "2026-08-19T06:19:52.355976+00:00"
-    },
-    {
-      "_id": "98536305-5f80-48d2-85eb-ab676e208bb0",
-      "user_id": "cfabcd67-ff99-4d84-974e-010c22f2ae36",
-      "name": "Contact One",
-      "email": "c1@example.com",
-      "phone": "+12345",
-      "created_at": "2026-08-19T06:33:59.266536+00:00"
     }
   ],
   "trips": [
@@ -321,21 +301,6 @@
       "share_token": "399afabd-d65d-4b44-aced-7f75ac4137c0",
       "checkin_interval_ms": 900000,
       "started_at": "2026-08-19T06:19:08.479241+00:00"
-    },
-    {
-      "_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
-      "user_id": "1a15003a-e1a0-4126-af3d-c22fbd1f9ba8",
-      "origin": "Library",
-      "destination": "Hostel",
-      "origin_lat": 28.6139,
-      "origin_lng": 77.209,
-      "dest_lat": 28.618,
-      "dest_lng": 77.215,
-      "expected_arrival": "2026-08-19T07:03:59.284370+00:00",
-      "status": "panic",
-      "share_token": "34b7d00c-28a6-42cb-96c1-422b2203cd31",
-      "checkin_interval_ms": 60000,
-      "started_at": "2026-08-19T06:33:59.284354+00:00"
     }
   ],
   "checkins": [
@@ -398,16 +363,6 @@
       "lat": 30.25144852460223,
       "lng": 77.04447877018828,
       "created_at": "2026-08-19T06:16:12.131583+00:00"
-    },
-    {
-      "_id": "bdfb1892-9b7e-471a-b633-e371b048df78",
-      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
-      "type": "manual",
-      "status": "safe",
-      "message": "I am safe but someone is following me",
-      "lat": 28.614,
-      "lng": 77.2095,
-      "created_at": "2026-08-19T06:33:59.291190+00:00"
     }
   ],
   "alerts": [
@@ -567,22 +522,13 @@
       "created_at": "2026-08-19T06:21:16.531046+00:00"
     },
     {
-      "_id": "8db78763-af00-4d83-bfcc-ca8b16272c42",
-      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
-      "type": "distress_message",
-      "severity": "high",
-      "lat": 28.614,
-      "lng": 77.2095,
-      "created_at": "2026-08-19T06:33:59.294976+00:00"
-    },
-    {
-      "_id": "f98c19b5-4869-45e9-bcc7-dea09717ecb8",
-      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
+      "_id": "1912a543-b607-4cb2-a069-8d814691b191",
+      "trip_id": "emergency",
       "type": "panic",
       "severity": "critical",
-      "lat": 28.615,
-      "lng": 77.21,
-      "created_at": "2026-08-19T06:33:59.309247+00:00"
+      "lat": 28.6139,
+      "lng": 77.209,
+      "created_at": "2026-08-19T06:37:24.454033+00:00"
     }
   ],
   "sent_emails": [
