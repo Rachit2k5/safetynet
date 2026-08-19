@@ -17,8 +17,29 @@ export default function App() {
 
   useEffect(() => {
     const stored = localStorage.getItem('sr_session');
-    if (stored) { try { setUser(JSON.parse(stored)); } catch (e) {} }
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        initDefaultUser();
+      }
+    } else {
+      initDefaultUser();
+    }
   }, []);
+
+  const initDefaultUser = () => {
+    const defaultUser = {
+      id: 'demo-user-id',
+      name: 'Safe Traveler',
+      email: 'traveler@saferoute.app',
+      parent_pin: '1234'
+    };
+    try {
+      localStorage.setItem('sr_session', JSON.stringify(defaultUser));
+    } catch (e) {}
+    setUser(defaultUser);
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
