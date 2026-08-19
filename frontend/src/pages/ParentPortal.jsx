@@ -232,8 +232,8 @@ export default function ParentPortal() {
       setDashboardData(freshData);
       
       const trip = freshData?.activeTrip || {};
-      const updatedLat = trip.current_lat || trip.latestCheckin?.lat || trip.origin_lat || 28.6139;
-      const updatedLng = trip.current_lng || trip.latestCheckin?.lng || trip.origin_lng || 77.2090;
+      const updatedLat = Number(trip.current_lat ?? trip.latestCheckin?.lat ?? trip.origin_lat ?? 28.6139);
+      const updatedLng = Number(trip.current_lng ?? trip.latestCheckin?.lng ?? trip.origin_lng ?? 77.2090);
 
       const timeStr = new Date().toLocaleTimeString();
       setGpsSyncMsg(`Live Hardware GPS fetched from traveler app at ${timeStr}! (${updatedLat.toFixed(6)}, ${updatedLng.toFixed(6)})`);
@@ -348,7 +348,7 @@ export default function ParentPortal() {
             {evidenceVault.map((item, idx) => (
               <div key={idx} className="bg-slate-900/90 border border-slate-800 p-3.5 rounded-xl space-y-3 shadow-lg">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-bold text-red-400 uppercase">🚨 Incident #{item.alertId.slice(0, 8)}</span>
+                  <span className="font-bold text-red-400 uppercase">🚨 Incident #{String(item.alertId || idx).slice(0, 8)}</span>
                   <span className="text-[10px] text-slate-400 font-mono">
                     {item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'Just now'}
                   </span>
