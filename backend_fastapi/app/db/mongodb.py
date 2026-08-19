@@ -29,16 +29,9 @@ class InMemoryMongoCollection:
             inserted_id = doc_copy["_id"]
         return Result()
 
-    def find_one(self, query):
-        for doc in self.data:
-            match = True
-            for k, v in query.items():
-                if doc.get(k) != v:
-                    match = False
-                    break
-            if match:
-                return dict(doc)
-        return None
+    def find_one(self, query=None, sort=None):
+        res = self.find(query, limit=1, sort=sort)
+        return res[0] if res else None
 
     def find(self, query=None, limit=0, sort=None):
         query = query or {}
