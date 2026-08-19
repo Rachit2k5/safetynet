@@ -2,7 +2,27 @@
   "name": "saferoute-monorepo",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "build": "node -e \"const fs=require('fs'); const {execSync}=require('child_process'); if(fs.existsSync('frontend')){execSync('npm run build --prefix frontend',{stdio:'inherit'}); if(fs.existsSync('frontend/dist')){fs.cpSync('frontend/dist','public',{recursive:true}); if(fs.existsSync('backend')) fs.cpSync('frontend/dist','backend/public',{recursive:true}); if(fs.existsSync('backend_fastapi')) fs.cpSync('frontend/dist','backend_fastapi/public',{recursive:true});}}else{execSync('npm run build',{stdio:'inherit'});}\""
+    "vercel-build": "npm install --prefix frontend && npm run build --prefix frontend && node -e \"const fs=require('fs'); if(fs.existsSync('frontend/dist')){fs.cpSync('frontend/dist','public',{recursive:true});}\"",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend && node -e \"const fs=require('fs'); if(fs.existsSync('frontend/dist')){fs.cpSync('frontend/dist','public',{recursive:true});}\""
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.28.0",
+    "socket.io-client": "^4.8.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.0",
+    "vite": "^5.4.0",
+    "vite-plugin-pwa": "^0.20.0"
   }
 }
