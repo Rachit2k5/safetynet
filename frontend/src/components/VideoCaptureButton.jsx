@@ -16,11 +16,14 @@ export default function VideoCaptureButton({ tripId }) {
   const chunksRef = useRef([]);
   const timerRef = useRef(null);
 
+  const isCancelledRef = useRef(false);
+
   const startCameraAndRecording = async () => {
     setIsOpen(true);
     setUploadStatus(null);
     setStatusMsg('');
     chunksRef.current = [];
+    isCancelledRef.current = false;
 
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -56,6 +59,10 @@ export default function VideoCaptureButton({ tripId }) {
       };
 
       mediaRecorder.onstop = async () => {
+        if (isCancelledRef.current) {
+          console.log('Video recording cancelled by user. Upload aborted.');
+          return;
+        }
         const blob = new Blob(chunksRef.current, { type: mimeType });
         await processAndUploadVideo(blob);
       };
@@ -96,6 +103,7 @@ export default function VideoCaptureButton({ tripId }) {
   };
 
   const cancelRecording = () => {
+    isCancelledRef.current = true;
     stopRecording();
     setIsOpen(false);
     setUploadStatus(null);

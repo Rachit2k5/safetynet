@@ -156,8 +156,15 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
     };
 
     recognition.onend = () => {
+      if (isComponentMounted.current && isListening) {
+        try {
+          recognition.start();
+          setAiStatus('Active & Listening continuously...');
+          return;
+        } catch (e) {}
+      }
       setIsListening(false);
-      if (isComponentMounted.current && recognitionRef.current === recognition) {
+      if (isComponentMounted.current) {
         setAiStatus('Paused — Tap Start to Listen');
       }
     };

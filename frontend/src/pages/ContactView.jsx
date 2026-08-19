@@ -36,7 +36,7 @@ export default function ContactView() {
       socket.on('alert:evidence', () => fetchTripStatus());
 
       socket.on('location:update', (loc) => {
-        setTrip(t => t ? ({ ...t, latestCheckin: { ...t.latestCheckin, lat: loc.lat, lng: loc.lng } }) : t);
+        setTrip(t => t ? ({ ...t, latestCheckin: { ...(t.latestCheckin || {}), lat: loc.lat, lng: loc.lng } }) : t);
       });
     }
     return () => {

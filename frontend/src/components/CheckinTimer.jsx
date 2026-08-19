@@ -108,7 +108,8 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 300000, on
         status: 'safe',
         message: message || 'I am safe',
         lat: position?.lat || 28.6139,
-        lng: position?.lng || 77.2090
+        lng: position?.lng || 77.2090,
+        interval_ms: userIntervalMs
       });
 
       // Reset target countdown time to user's selected interval

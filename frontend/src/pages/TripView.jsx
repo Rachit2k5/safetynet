@@ -123,6 +123,7 @@ export default function TripView() {
         <CheckinTimer 
           deadline={trip.expected_arrival || new Date(Date.now() + 15*60000).toISOString()} 
           tripId={trip.id} 
+          intervalMs={trip.checkin_interval_ms || 300000}
           onAutoPanicTrigger={handleAutoPanicTrigger}
         />
       </div>

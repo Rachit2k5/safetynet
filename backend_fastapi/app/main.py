@@ -149,6 +149,7 @@ class CheckinPayload(BaseModel):
     message: Optional[str] = "I am safe"
     lat: Optional[float] = 28.6139
     lng: Optional[float] = 77.2090
+    interval_ms: Optional[int] = None
 
 class PanicPayload(BaseModel):
     lat: Optional[float] = 28.6139
@@ -549,11 +550,16 @@ async def checkin(trip_id: str, payload: CheckinPayload, user: dict = Depends(ge
         "created_at": datetime.now(timezone.utc).isoformat()
     })
 
+    interval_ms = payload.interval_ms or trip.get("checkin_interval_ms", 300000)
+    next_due_iso = (datetime.now(timezone.utc) + timedelta(milliseconds=interval_ms)).isoformat()
     checkin_timer.reset_timer(trip_id)
 
-    # Resolution of overdue/missed state upon safe check-in
+    # Resolution of overdue/missed state upon safe check-in & next check-in deadline extension
     if payload.status == "safe":
-        db["trips"].update_one({"_id": trip_id}, {"$set": {"status": "active", "risk_status": "safe"}})
+        db["trips"].update_one(
+            {"_id": trip_id},
+            {"$set": {"status": "active", "risk_status": "safe", "next_checkin_due": next_due_iso, "expected_arrival": next_due_iso, "checkin_interval_ms": interval_ms}}
+        )
 
     if threat_analysis["isDistressed"]:
         alert_id = str(uuid.uuid4())
