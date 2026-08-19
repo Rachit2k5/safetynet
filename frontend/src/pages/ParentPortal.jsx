@@ -229,10 +229,18 @@ export default function ParentPortal() {
     );
   }
 
-  const child = dashboardData.child || {};
-  const activeTrip = dashboardData.activeTrip || {};
-  const evidenceVault = dashboardData.evidenceVault || [];
-  const checkinLogs = dashboardData.checkinLogs || [];
+  const child = dashboardData?.child || {};
+  const activeTrip = dashboardData?.activeTrip || {};
+  const evidenceVault = dashboardData?.evidenceVault || [];
+  const checkinLogs = dashboardData?.checkinLogs || [];
+
+  const parseCoord = (val, fallback) => {
+    const num = parseFloat(val);
+    return (!isNaN(num) && isFinite(num)) ? num : fallback;
+  };
+
+  const currentLat = parseCoord(activeTrip?.current_lat ?? activeTrip?.latestCheckin?.lat ?? activeTrip?.origin_lat, 28.6139);
+  const currentLng = parseCoord(activeTrip?.current_lng ?? activeTrip?.latestCheckin?.lng ?? activeTrip?.origin_lng, 77.2090);
 
   const handleFetchTravelerGps = async () => {
     setFetchingGps(true);
@@ -247,8 +255,8 @@ export default function ParentPortal() {
       setDashboardData(freshData);
       
       const trip = freshData?.activeTrip || {};
-      const updatedLat = Number(trip.current_lat ?? trip.latestCheckin?.lat ?? trip.origin_lat ?? 28.6139);
-      const updatedLng = Number(trip.current_lng ?? trip.latestCheckin?.lng ?? trip.origin_lng ?? 77.2090);
+      const updatedLat = parseCoord(trip.current_lat ?? trip.latestCheckin?.lat ?? trip.origin_lat, 28.6139);
+      const updatedLng = parseCoord(trip.current_lng ?? trip.latestCheckin?.lng ?? trip.origin_lng, 77.2090);
 
       const timeStr = new Date().toLocaleTimeString();
       setGpsSyncMsg(`Live Hardware GPS fetched from traveler app at ${timeStr}! (${updatedLat.toFixed(6)}, ${updatedLng.toFixed(6)})`);

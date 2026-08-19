@@ -41,10 +41,15 @@ function MapBounds({ markers }) {
   return null;
 }
 
+const parseCoord = (val, fallback) => {
+  const num = parseFloat(val);
+  return (!isNaN(num) && isFinite(num)) ? num : fallback;
+};
+
 export default function MapView({ center, zoom = 14, currentLocation, origin, destination, routeWaypoints = [] }) {
-  const defaultLat = center ? center[0] : (currentLocation?.lat || origin?.lat || 28.6139);
-  const defaultLng = center ? center[1] : (currentLocation?.lng || origin?.lng || 77.2090);
-  const markers = [currentLocation, origin, destination].filter(Boolean);
+  const defaultLat = parseCoord(center ? center[0] : (currentLocation?.lat || origin?.lat), 28.6139);
+  const defaultLng = parseCoord(center ? center[1] : (currentLocation?.lng || origin?.lng), 77.2090);
+  const markers = [currentLocation, origin, destination].filter(m => m && typeof m.lat === 'number' && !isNaN(m.lat) && typeof m.lng === 'number' && !isNaN(m.lng));
 
   return (
     <div className="w-full h-full min-h-[220px] rounded-xl overflow-hidden glass-card relative z-0">

@@ -679,6 +679,70 @@
       "created_at": "2026-08-19T09:29:38.331714+00:00",
       "parent_pin_hash": "$2b$12$aboNhF.Yw.FZrA.u3uqmSu1SOXJBdLl60xbf/gzY91dCwuyOHleti",
       "parent_pin_raw": "5678"
+    },
+    {
+      "_id": "60f9e050-3bc9-4db8-a9b5-bfce82fb8b49",
+      "name": "Test Traveler",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGY5ZTA1MC0zYmM5LTRkYjgtYTliNS1iZmNlODJmYjhiNDkiLCJlbWFpbCI6IiIsImlhdCI6MTc4NzEzMjI1NCwiZXhwIjoxNzg5NzI0MjU0fQ.hLZ6HcSxM2zfz4sRYs_4mB-lsGroilnt6o_4RiPnbt4",
+      "created_at": "2026-08-19T09:37:34.438933+00:00"
+    },
+    {
+      "_id": "6f441d93-92b8-481e-81de-54487c96031c",
+      "name": "Alice",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZjQ0MWQ5My05MmI4LTQ4MWUtODFkZS01NDQ4N2M5NjAzMWMiLCJlbWFpbCI6IiIsImlhdCI6MTc4NzEzMjI1NCwiZXhwIjoxNzg5NzI0MjU0fQ.-3e0VV8S8jVugrZv-vQ6zpbProIWUYo3sDr18GnLCjE",
+      "created_at": "2026-08-19T09:37:34.486376+00:00"
+    },
+    {
+      "_id": "628fa48f-38f1-478d-a0ad-c862a374ef46",
+      "name": "Bob",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MjhmYTQ4Zi0zOGYxLTQ3OGQtYTBhZC1jODYyYTM3NGVmNDYiLCJlbWFpbCI6IiIsImlhdCI6MTc4NzEzMjI1NCwiZXhwIjoxNzg5NzI0MjU0fQ.to2Zak4WYAOjiVNz7TYDbAAfJeXh7fheCgFEF2-rgxU",
+      "created_at": "2026-08-19T09:37:34.610266+00:00"
+    },
+    {
+      "_id": "cf6f01a3-ab07-4a38-9cb2-72dc660fe79d",
+      "name": "Hardened User",
+      "email": "harden_user_f480c5c2@example.com",
+      "password_hash": "$2b$12$tJtdfVqPx.0Dm.a14ZeabulaA/R70HsGZGKkFwhaIxwZ7KfrtEljm",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZjZmMDFhMy1hYjA3LTRhMzgtOWNiMi03MmRjNjYwZmU3OWQiLCJlbWFpbCI6ImhhcmRlbl91c2VyX2Y0ODBjNWMyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzg3MTMyMjU1LCJleHAiOjE3ODk3MjQyNTV9.nYHuzBIS9yKlf53O4qOWrWDb3NTuEHLOf2pfxh0G0l8",
+      "created_at": "2026-08-19T09:37:34.989804+00:00"
+    },
+    {
+      "_id": "a474b2fc-d8b5-4ae0-8b6e-2a6fd099cb04",
+      "name": "User One",
+      "email": "u1_75eba605@example.com",
+      "password_hash": "$2b$12$91EfbyyjghDrModfP0dcuefGA6yl6X4KmP/MGyejJ5slbx6c9lvgW",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNDc0YjJmYy1kOGI1LTRhZTAtOGI2ZS0yYTZmZDA5OWNiMDQiLCJlbWFpbCI6InUxXzc1ZWJhNjA1QGV4YW1wbGUuY29tIiwiaWF0IjoxNzg3MTMyMjU2LCJleHAiOjE3ODk3MjQyNTZ9.vQADf2bpgrOtCYs5x-yt7wZSsaKPX7dosvjL38mEgAQ",
+      "created_at": "2026-08-19T09:37:36.167010+00:00"
+    },
+    {
+      "_id": "94f5fdad-c11b-4528-a056-43165cbe5de8",
+      "name": "User Two",
+      "email": "u2_a3126f6a@example.com",
+      "password_hash": "$2b$12$.l01zScwzHDgpT7uimEQiOWCtRiQYpteQmwrJbS.d0W/anr0OzhZm",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NGY1ZmRhZC1jMTFiLTQ1MjgtYTA1Ni00MzE2NWNiZTVkZTgiLCJlbWFpbCI6InUyX2EzMTI2ZjZhQGV4YW1wbGUuY29tIiwiaWF0IjoxNzg3MTMyMjU2LCJleHAiOjE3ODk3MjQyNTZ9.o4xMHp-PvJUmyimIebALPnen2FFOrJCQ4DCS-dG19P4",
+      "created_at": "2026-08-19T09:37:36.540123+00:00"
+    },
+    {
+      "_id": "41534631-acd3-4c2d-b62c-a0c8aa7f5907",
+      "name": "Driver",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MTUzNDYzMS1hY2QzLTRjMmQtYjYyYy1hMGM4YWE3ZjU5MDciLCJlbWFpbCI6IiIsImlhdCI6MTc4NzEzMjI1NiwiZXhwIjoxNzg5NzI0MjU2fQ.uTPzSaCH_kYXJEKghU2a2Tb1myK20-hlRAKSLPZlmRI",
+      "created_at": "2026-08-19T09:37:36.589348+00:00"
+    },
+    {
+      "_id": "aa060f73-7a60-4e48-aa64-955223468a8d",
+      "name": "Traveler SOS",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYTA2MGY3My03YTYwLTRlNDgtYWE2NC05NTUyMjM0NjhhOGQiLCJlbWFpbCI6IiIsImlhdCI6MTc4NzEzMjI1NiwiZXhwIjoxNzg5NzI0MjU2fQ.AUdXnZ2RzexFJMwgvx8GrmajP6jXi6Y_KnwEOLvPImc",
+      "created_at": "2026-08-19T09:37:36.668370+00:00"
+    },
+    {
+      "_id": "e89ef7d4-9fde-46d1-85e1-c267b5a6bf26",
+      "name": "Child Traveler",
+      "email": "child_08ebccdd@example.com",
+      "password_hash": "$2b$12$4oV/jEV.rgJwbFahySvKQ.ex/B8sxEJpf6R2OvvX4/BU2TKvrMLn6",
+      "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlODllZjdkNC05ZmRlLTQ2ZDEtODVlMS1jMjY3YjVhNmJmMjYiLCJlbWFpbCI6ImNoaWxkXzA4ZWJjY2RkQGV4YW1wbGUuY29tIiwiaWF0IjoxNzg3MTMyMjYwLCJleHAiOjE3ODk3MjQyNjB9.0sYyz9E7N0tXt8C9X8qaMau1273jV2lpeIbcofCtmw0",
+      "created_at": "2026-08-19T09:37:40.401347+00:00",
+      "parent_pin_hash": "$2b$12$uz9Q.AU/OL2YKm3/V87Rb.zVxPsrDmBm8X85zOlqEqkORHRZe67.S",
+      "parent_pin_raw": "5678"
     }
   ],
   "contacts": [
@@ -873,6 +937,22 @@
       "email": "mom@example.com",
       "phone": "+1234567890",
       "created_at": "2026-08-19T09:29:36.285657+00:00"
+    },
+    {
+      "_id": "e955c777-194e-4f89-be3f-d59fc854f25d",
+      "user_id": "60f9e050-3bc9-4db8-a9b5-bfce82fb8b49",
+      "name": "Contact One",
+      "email": "c1@example.com",
+      "phone": "+12345",
+      "created_at": "2026-08-19T09:37:34.462100+00:00"
+    },
+    {
+      "_id": "72912f0a-2ecf-4973-a90b-cd2157b8f190",
+      "user_id": "a474b2fc-d8b5-4ae0-8b6e-2a6fd099cb04",
+      "name": "Mom",
+      "email": "mom@example.com",
+      "phone": "+1234567890",
+      "created_at": "2026-08-19T09:37:36.558628+00:00"
     }
   ],
   "trips": [
@@ -1530,6 +1610,67 @@
       "share_token": "8551cf3c-517d-4419-802c-009bbc03e20e",
       "checkin_interval_ms": 900000,
       "started_at": "2026-08-19T09:29:36.417668+00:00"
+    },
+    {
+      "_id": "154ba984-e0ef-4305-a7cc-b4879c9bfa06",
+      "user_id": "6f441d93-92b8-481e-81de-54487c96031c",
+      "origin": "Library",
+      "destination": "Hostel",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "current_lat": 28.615,
+      "current_lng": 77.21,
+      "expected_arrival": "2026-08-19T09:38:34.536381+00:00",
+      "status": "panic",
+      "risk_status": "critical",
+      "share_token": "7360e7f2-9196-4224-923c-65e4ca4628b6",
+      "checkin_interval_ms": 60000,
+      "started_at": "2026-08-19T09:37:34.505274+00:00",
+      "next_checkin_due": "2026-08-19T09:38:34.536381+00:00"
+    },
+    {
+      "_id": "07adb7c7-1974-4bb9-8d6a-db98a57b84a1",
+      "user_id": "41534631-acd3-4c2d-b62c-a0c8aa7f5907",
+      "origin": "Point A",
+      "destination": "Point B",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "current_lat": 28.66,
+      "current_lng": 77.26,
+      "expected_arrival": "2026-08-19T10:07:36.608380+00:00",
+      "status": "active",
+      "risk_status": "HIGH",
+      "share_token": "9a630e00-6c8a-4be6-beae-20957aeb6fbc",
+      "checkin_interval_ms": 900000,
+      "started_at": "2026-08-19T09:37:36.608361+00:00",
+      "deviation": {
+        "deviationDistanceKm": 6.457,
+        "riskLevel": "HIGH",
+        "flag": "CRITICAL_ROUTE_DEVIATION",
+        "isDeviated": true
+      }
+    },
+    {
+      "_id": "b08bd54a-80da-4c27-b546-4f6106f536e8",
+      "user_id": "aa060f73-7a60-4e48-aa64-955223468a8d",
+      "origin": "A",
+      "destination": "B",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "current_lat": 28.6139,
+      "current_lng": 77.209,
+      "expected_arrival": "2026-08-19T10:07:36.687849+00:00",
+      "status": "panic",
+      "risk_status": "critical",
+      "share_token": "20453682-9792-4ab6-b08a-56ba3fb3dd46",
+      "checkin_interval_ms": 900000,
+      "started_at": "2026-08-19T09:37:36.687833+00:00"
     }
   ],
   "checkins": [
@@ -1980,6 +2121,32 @@
         }
       },
       "created_at": "2026-08-19T09:29:34.911863+00:00"
+    },
+    {
+      "_id": "560c882b-e43d-41e9-824b-a39ff05908ff",
+      "trip_id": "154ba984-e0ef-4305-a7cc-b4879c9bfa06",
+      "type": "manual",
+      "status": "safe",
+      "message": "I am safe but someone is following me",
+      "lat": 28.614,
+      "lng": 77.2095,
+      "threatAnalysis": {
+        "threatScore": 9.5,
+        "riskLevel": "CRITICAL",
+        "isDistressed": true,
+        "activateEmergencyWorkflow": true,
+        "details": {
+          "keywordsFound": [
+            "following",
+            "follow",
+            "someone"
+          ],
+          "isOverdue": false,
+          "isDeviated": false,
+          "contradictionFlag": true
+        }
+      },
+      "created_at": "2026-08-19T09:37:34.522785+00:00"
     }
   ],
   "alerts": [
@@ -2647,6 +2814,42 @@
       "lat": 28.6139,
       "lng": 77.209,
       "created_at": "2026-08-19T09:29:36.440277+00:00"
+    },
+    {
+      "_id": "a9744ef2-6328-4f39-a960-e8582c68b41f",
+      "trip_id": "154ba984-e0ef-4305-a7cc-b4879c9bfa06",
+      "type": "distress_message",
+      "severity": "high",
+      "lat": 28.614,
+      "lng": 77.2095,
+      "created_at": "2026-08-19T09:37:34.546797+00:00"
+    },
+    {
+      "_id": "d4982a94-ebd5-407b-8a86-c74255414a75",
+      "trip_id": "154ba984-e0ef-4305-a7cc-b4879c9bfa06",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 28.615,
+      "lng": 77.21,
+      "created_at": "2026-08-19T09:37:34.592559+00:00"
+    },
+    {
+      "_id": "a7275a3f-037b-4f4a-893c-6248199d14e3",
+      "trip_id": "07adb7c7-1974-4bb9-8d6a-db98a57b84a1",
+      "type": "route_deviation",
+      "severity": "high",
+      "lat": 28.66,
+      "lng": 77.26,
+      "created_at": "2026-08-19T09:37:36.628417+00:00"
+    },
+    {
+      "_id": "81bf4ec0-9472-4ce5-b0a8-2edf8d434041",
+      "trip_id": "b08bd54a-80da-4c27-b546-4f6106f536e8",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "created_at": "2026-08-19T09:37:36.722897+00:00"
     }
   ],
   "sent_emails": [
