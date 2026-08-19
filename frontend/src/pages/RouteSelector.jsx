@@ -217,7 +217,16 @@ export default function RouteSelector() {
           Tap any department button below to directly dial emergency services or police from your phone.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+          <a
+            href={`tel:${localStorage.getItem('sr_parent_phone') || '+1234567890'}`}
+            className="p-3 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/80 rounded-xl text-center shadow-lg transition-all"
+          >
+            <span className="text-xs font-bold text-emerald-200 block">👨‍👩‍👧 Parent / Guardian</span>
+            <span className="text-xs font-black text-white font-mono block truncate">{localStorage.getItem('sr_parent_phone') || '+1234567890'}</span>
+            <span className="text-[10px] text-emerald-300 font-bold block mt-1">📞 Click to Call</span>
+          </a>
+
           <a
             href="tel:112"
             className="p-3 bg-red-950/80 hover:bg-red-900 border border-red-500/80 rounded-xl text-center shadow-lg transition-all"
@@ -231,7 +240,7 @@ export default function RouteSelector() {
             href="tel:100"
             className="p-3 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-xl text-center shadow-lg transition-all"
           >
-            <span className="text-xs font-bold text-cyan-300 block">🚓 Police Control Room</span>
+            <span className="text-xs font-bold text-cyan-300 block">🚓 Police Control</span>
             <span className="text-base font-black text-white font-mono">100</span>
             <span className="text-[10px] text-cyan-400 font-bold block mt-1">📞 Click to Call</span>
           </a>
@@ -240,7 +249,7 @@ export default function RouteSelector() {
             href="tel:1091"
             className="p-3 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-xl text-center shadow-lg transition-all"
           >
-            <span className="text-xs font-bold text-purple-300 block">👩 Women Safety Helpline</span>
+            <span className="text-xs font-bold text-purple-300 block">👩 Women Safety</span>
             <span className="text-base font-black text-white font-mono">1091</span>
             <span className="text-[10px] text-purple-400 font-bold block mt-1">📞 Click to Call</span>
           </a>

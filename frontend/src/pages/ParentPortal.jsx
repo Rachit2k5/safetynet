@@ -71,7 +71,9 @@ export default function ParentPortal() {
             activeTrip: {
               ...prev.activeTrip,
               current_lat: loc.lat,
-              current_lng: loc.lng
+              current_lng: loc.lng,
+              is_offline: loc.is_offline,
+              last_updated_at: loc.last_updated_at
             }
           };
         });
@@ -283,6 +285,21 @@ export default function ParentPortal() {
         </div>
 
         <div className="flex items-center gap-2">
+          {child.phone || child.parent_phone ? (
+            <a
+              href={`tel:${child.phone || child.parent_phone}`}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-400 transition-all flex items-center gap-1 shadow-md whitespace-nowrap"
+            >
+              <span>📞</span> Call Child ({child.phone || child.parent_phone})
+            </a>
+          ) : (
+            <a
+              href={`tel:${localStorage.getItem('sr_parent_phone') || '+1234567890'}`}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold border border-emerald-400 transition-all flex items-center gap-1 shadow-md whitespace-nowrap"
+            >
+              <span>📞</span> Call Child Line
+            </a>
+          )}
           <button
             onClick={() => navigate('/')}
             className="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1 shadow-md"
@@ -328,6 +345,24 @@ export default function ParentPortal() {
             </span>
           </div>
         </div>
+
+        {(activeTrip.is_offline || (activeTrip.last_updated_at && Date.now() - new Date(activeTrip.last_updated_at).getTime() > 25000)) && (
+          <div className="mb-3 bg-amber-950/90 border border-amber-500 text-amber-200 p-3 rounded-xl text-xs font-bold flex items-center justify-between shadow-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-base">⚠️</span>
+              <div>
+                <p className="text-amber-100 font-bold">Traveler Device is Currently Offline</p>
+                <p className="text-[11px] text-amber-300 font-mono">
+                  Displaying Last Known Offline GPS Position ({currentLat.toFixed(6)}, {currentLng.toFixed(6)})
+                  {activeTrip.last_known_offline_time && ` saved at ${new Date(activeTrip.last_known_offline_time).toLocaleTimeString()}`}
+                </p>
+              </div>
+            </div>
+            <span className="bg-amber-900 text-amber-200 text-[10px] font-black px-2 py-0.5 rounded uppercase font-mono">
+              Offline Saved GPS
+            </span>
+          </div>
+        )}
 
         {gpsSyncMsg && (
           <div className="mb-3 bg-emerald-950/90 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow">

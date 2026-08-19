@@ -124,6 +124,13 @@ class UserLogin(BaseModel):
 
 class UserCreate(BaseModel):
     name: str
+    parent_phone: Optional[str] = None
+    phone: Optional[str] = None
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    parent_phone: Optional[str] = None
+    phone: Optional[str] = None
 
 class ContactCreate(BaseModel):
     name: str
@@ -143,6 +150,8 @@ class TripCreate(BaseModel):
 class LocationUpdatePayload(BaseModel):
     lat: float
     lng: float
+    is_offline: Optional[bool] = False
+    offline_timestamp: Optional[str] = None
 
 class CheckinPayload(BaseModel):
     status: Optional[str] = "safe"
@@ -150,10 +159,6 @@ class CheckinPayload(BaseModel):
     lat: Optional[float] = 28.6139
     lng: Optional[float] = 77.2090
     interval_ms: Optional[int] = None
-
-class LocationUpdatePayload(BaseModel):
-    lat: float
-    lng: float
 
 class PanicPayload(BaseModel):
     lat: Optional[float] = 28.6139
@@ -244,15 +249,46 @@ def create_user(payload: UserCreate):
     doc = {
         "_id": user_id,
         "name": payload.name.strip(),
+        "parent_phone": payload.parent_phone.strip() if payload.parent_phone else "",
+        "phone": payload.phone.strip() if payload.phone else "",
         "session_token": jwt_token,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     db["users"].insert_one(doc)
-    return {"id": user_id, "name": payload.name, "token": jwt_token, "sessionToken": jwt_token}
+    return {"id": user_id, "name": payload.name, "parent_phone": doc["parent_phone"], "phone": doc["phone"], "token": jwt_token, "sessionToken": jwt_token}
+
+@app.put("/api/users/{user_id}")
+def update_user(user_id: str, payload: UserUpdate, user: dict = Depends(get_current_user)):
+    verify_user_ownership(user_id, user)
+    updates = {}
+    if payload.name is not None:
+        updates["name"] = payload.name.strip()
+    if payload.parent_phone is not None:
+        updates["parent_phone"] = payload.parent_phone.strip()
+    if payload.phone is not None:
+        updates["phone"] = payload.phone.strip()
+
+    if updates:
+        db["users"].update_one({"_id": user["_id"]}, {"$set": updates})
+
+    updated = db["users"].find_one({"_id": user["_id"]})
+    return {
+        "id": updated["_id"],
+        "name": updated.get("name", "Traveler"),
+        "email": updated.get("email", ""),
+        "parent_phone": updated.get("parent_phone", ""),
+        "phone": updated.get("phone", "")
+    }
 
 @app.get("/api/users/me")
 def get_me(user: dict = Depends(get_current_user)):
-    return {"id": user["_id"], "name": user["name"], "email": user.get("email", "")}
+    return {
+        "id": user["_id"],
+        "name": user.get("name", "Traveler"),
+        "email": user.get("email", ""),
+        "parent_phone": user.get("parent_phone", ""),
+        "phone": user.get("phone", "")
+    }
 
 class ParentPinPayload(BaseModel):
     pin: str
@@ -388,7 +424,9 @@ def get_parent_dashboard(authorization: Optional[str] = Header(None)):
         "child": {
             "id": user["_id"],
             "name": user.get("name", "Child Traveler"),
-            "email": user.get("email", "")
+            "email": user.get("email", ""),
+            "parent_phone": user.get("parent_phone", ""),
+            "phone": user.get("phone", "")
         },
         "activeTrip": {**active_trip, "id": active_trip["_id"]} if active_trip else None,
         "recentTrips": [{**t, "id": t["_id"]} for t in trips[:5]],
@@ -540,12 +578,31 @@ async def update_trip_location(trip_id: str, payload: LocationUpdatePayload):
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
 
+    now_iso = datetime.now(timezone.utc).isoformat()
+    update_doc = {
+        "current_lat": payload.lat,
+        "current_lng": payload.lng,
+        "last_updated_at": now_iso,
+        "is_offline": bool(payload.is_offline)
+    }
+
+    if payload.is_offline:
+        update_doc["last_known_offline_lat"] = payload.lat
+        update_doc["last_known_offline_lng"] = payload.lng
+        update_doc["last_known_offline_time"] = payload.offline_timestamp or now_iso
+
     db["trips"].update_one(
         {"_id": trip_id},
-        {"$set": {"current_lat": payload.lat, "current_lng": payload.lng}}
+        {"$set": update_doc}
     )
-    await broadcast_alert(active_websockets, trip_id, {"type": "location:update", "lat": payload.lat, "lng": payload.lng})
-    return {"success": True, "lat": payload.lat, "lng": payload.lng}
+    await broadcast_alert(active_websockets, trip_id, {
+        "type": "location:update",
+        "lat": payload.lat,
+        "lng": payload.lng,
+        "is_offline": bool(payload.is_offline),
+        "last_updated_at": now_iso
+    })
+    return {"success": True, "lat": payload.lat, "lng": payload.lng, "is_offline": bool(payload.is_offline)}
 
 @app.put("/api/trips/{trip_id}/checkin")
 async def checkin(trip_id: str, payload: CheckinPayload, user: dict = Depends(get_current_user)):

@@ -37,12 +37,32 @@ export default function TripView() {
 
   useEffect(() => {
     if (position && trip) {
-      const sendLocation = () => {
-        if (socket) socket.emit('location:send', { tripId: trip.id, lat: position.lat, lng: position.lng });
-        apiPut(`/api/trips/${trip.id}/location`, { lat: position.lat, lng: position.lng }).catch(() => {});
+      const sendLocation = (isOffline = !navigator.onLine) => {
+        const payload = {
+          lat: position.lat,
+          lng: position.lng,
+          is_offline: isOffline,
+          offline_timestamp: isOffline ? new Date().toISOString() : null
+        };
+        // Store last known coordinates locally for offline persistence
+        localStorage.setItem('sr_last_known_gps', JSON.stringify({
+          lat: position.lat,
+          lng: position.lng,
+          time: new Date().toISOString(),
+          tripId: trip.id
+        }));
+
+        if (socket && !isOffline) socket.emit('location:send', { tripId: trip.id, ...payload });
+        apiPut(`/api/trips/${trip.id}/location`, payload).catch(() => {});
       };
+
       sendLocation();
-      const interval = setInterval(sendLocation, 4000);
+      const interval = setInterval(() => sendLocation(), 4000);
+
+      const handleOffline = () => sendLocation(true);
+      const handleOnline = () => sendLocation(false);
+      window.addEventListener('offline', handleOffline);
+      window.addEventListener('online', handleOnline);
 
       if (socket) {
         socket.on('location:request', () => {
@@ -53,6 +73,8 @@ export default function TripView() {
 
       return () => {
         clearInterval(interval);
+        window.removeEventListener('offline', handleOffline);
+        window.removeEventListener('online', handleOnline);
         if (socket) socket.off('location:request');
       };
     }
@@ -98,14 +120,22 @@ export default function TripView() {
       )}
 
       <div className="glass-card p-4 mb-4 border border-slate-700/80 shadow-xl">
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-2 gap-2">
           <div>
             <h2 className="font-bold text-lg text-white">{trip.origin} → {trip.destination}</h2>
             <p className="text-xs text-slate-400">Started at: {new Date(trip.started_at).toLocaleTimeString()}</p>
           </div>
-          <button onClick={handleCompleteTrip} className="btn-safe text-xs px-3 py-1.5 rounded-xl font-bold shadow">
-            End Trip Safely
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href={`tel:${localStorage.getItem('sr_parent_phone') || '+1234567890'}`}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-xl font-bold shadow flex items-center gap-1 border border-emerald-400"
+            >
+              <span>📞</span> Call Parent
+            </a>
+            <button onClick={handleCompleteTrip} className="btn-safe text-xs px-3 py-1.5 rounded-xl font-bold shadow whitespace-nowrap">
+              End Trip
+            </button>
+          </div>
         </div>
 
         {shareUrl && (

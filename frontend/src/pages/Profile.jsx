@@ -11,6 +11,8 @@ export default function Profile() {
   const [cName, setCName] = useState('');
   const [cEmail, setCEmail] = useState('');
   const [cPhone, setCPhone] = useState('');
+  const [parentPhone, setParentPhone] = useState(() => user?.parent_phone || localStorage.getItem('sr_parent_phone') || '+1234567890');
+  const [phoneMsg, setPhoneMsg] = useState('');
   
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -53,6 +55,26 @@ export default function Profile() {
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
       setError('Failed to save profile.');
+    }
+  };
+
+  const handleSaveParentPhone = async (e) => {
+    e.preventDefault();
+    if (!parentPhone.trim()) return;
+    const cleanPhone = parentPhone.trim();
+    localStorage.setItem('sr_parent_phone', cleanPhone);
+    const updatedUser = { ...user, parent_phone: cleanPhone };
+    try {
+      localStorage.setItem('sr_session', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      if (user?.id) {
+        await apiPut(`/api/users/${user.id}`, { parent_phone: cleanPhone });
+      }
+      setPhoneMsg('✓ Parent Phone Number updated successfully!');
+      setTimeout(() => setPhoneMsg(''), 3000);
+    } catch (err) {
+      setPhoneMsg('✓ Parent Phone Number saved locally!');
+      setTimeout(() => setPhoneMsg(''), 3000);
     }
   };
 
@@ -149,6 +171,48 @@ export default function Profile() {
           <button type="submit" className="bg-slate-800 hover:bg-slate-700 text-sr-info border border-slate-700 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
             Update Name
           </button>
+        </form>
+      </div>
+
+      {/* Primary Parent/Guardian Emergency Direct Call Number Setup Card */}
+      <div className="glass-card p-6 mb-6 border border-cyan-500/40 shadow-xl relative overflow-hidden">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="font-bold text-base text-white flex items-center gap-2">
+            <span>📞</span> Parent & Guardian Phone Number
+          </h3>
+          <span className="bg-cyan-950 text-cyan-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-cyan-800/40">
+            Instant Direct Call
+          </span>
+        </div>
+        <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+          Specify your parent or guardian's primary mobile number. In an emergency or voice distress event, tapping <strong>"Call Parent"</strong> will instantly dial this number from your phone.
+        </p>
+
+        {phoneMsg && <div className="bg-emerald-950/90 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-xs mb-3 text-center font-bold">{phoneMsg}</div>}
+
+        <form onSubmit={handleSaveParentPhone} className="space-y-3">
+          <div className="flex gap-2">
+            <input 
+              type="tel" 
+              value={parentPhone} 
+              onChange={e => setParentPhone(e.target.value)} 
+              className="flex-1 bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none font-mono focus:ring-2 focus:ring-sr-info" 
+              placeholder="e.g. +91 9876543210"
+              required
+            />
+            <button type="submit" className="btn-info px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap shadow-md">
+              Save Number
+            </button>
+          </div>
+          
+          <div className="pt-2">
+            <a 
+              href={`tel:${parentPhone}`}
+              className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded-xl font-bold text-xs border border-slate-700 flex items-center justify-center gap-2 shadow"
+            >
+              <span>📞</span> Test Call Parent ({parentPhone})
+            </a>
+          </div>
         </form>
       </div>
 

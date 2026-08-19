@@ -75,6 +75,14 @@ export default function DirectCallModal({ isOpen, onClose, detectedKeyword, spok
             <span>📞</span> DIRECT CALL POLICE (112) NOW
           </a>
 
+          <a
+            href={`tel:${localStorage.getItem('sr_parent_phone') || '+1234567890'}`}
+            onClick={() => triggerDirectCall(localStorage.getItem('sr_parent_phone') || '+1234567890')}
+            className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl border border-emerald-400"
+          >
+            <span>👨‍👩‍👧</span> CALL PARENT / GUARDIAN ({localStorage.getItem('sr_parent_phone') || '+1234567890'})
+          </a>
+
           <div className="grid grid-cols-2 gap-2">
             <a
               href="tel:100"
