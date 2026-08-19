@@ -381,6 +381,17 @@
       "lat": 30.25147839658703,
       "lng": 77.04444409086425,
       "created_at": "2026-08-19T05:52:19.310509+00:00"
+    },
+    {
+      "_id": "541ff9ee-c3ea-4ef7-935b-46854b1a7808",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.25142240040355,
+      "lng": 77.04451391782789,
+      "created_at": "2026-08-19T05:53:49.467796+00:00",
+      "photo_url": "/uploads/photo_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.jpg",
+      "evidence_url": "/uploads/evidence_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.webm"
     }
   ],
   "sent_emails": [
@@ -460,6 +471,28 @@
       "spokenTranscript": "Emergency Panic Button Pressed",
       "deliveredAt": "2026-08-19T05:52:19.312535+00:00",
       "_id": "5c39b10d-2290-4ae3-8c8d-4f29568ce1b1"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Panic Button Pressed",
+      "deliveredAt": "2026-08-19T05:53:49.470204+00:00",
+      "_id": "e3b96408-e363-40e7-b05f-54fbdc1f191c"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": "http://localhost:3001/uploads/photo_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.jpg",
+      "audioUrl": "http://localhost:3001/uploads/evidence_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.webm",
+      "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
+      "deliveredAt": "2026-08-19T05:53:53.584441+00:00",
+      "_id": "d40f6f3e-5d72-41dd-a135-160a24598a41"
     }
   ]
 }
