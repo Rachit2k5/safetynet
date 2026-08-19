@@ -151,6 +151,10 @@ class CheckinPayload(BaseModel):
     lng: Optional[float] = 77.2090
     interval_ms: Optional[int] = None
 
+class LocationUpdatePayload(BaseModel):
+    lat: float
+    lng: float
+
 class PanicPayload(BaseModel):
     lat: Optional[float] = 28.6139
     lng: Optional[float] = 77.2090
@@ -530,6 +534,19 @@ def get_sent_emails(user_id: str, user: dict = Depends(get_current_user)):
     emails = list(db["sent_emails"].find({}, sort=[("deliveredAt", -1)]))
     return [{**e, "id": str(e["_id"])} for e in emails]
 
+@app.put("/api/trips/{trip_id}/location")
+async def update_trip_location(trip_id: str, payload: LocationUpdatePayload):
+    trip = db["trips"].find_one({"_id": trip_id})
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+
+    db["trips"].update_one(
+        {"_id": trip_id},
+        {"$set": {"current_lat": payload.lat, "current_lng": payload.lng}}
+    )
+    await broadcast_alert(active_websockets, trip_id, {"type": "location:update", "lat": payload.lat, "lng": payload.lng})
+    return {"success": True, "lat": payload.lat, "lng": payload.lng}
+
 @app.put("/api/trips/{trip_id}/checkin")
 async def checkin(trip_id: str, payload: CheckinPayload, user: dict = Depends(get_current_user)):
     trip = db["trips"].find_one({"_id": trip_id})
@@ -554,12 +571,17 @@ async def checkin(trip_id: str, payload: CheckinPayload, user: dict = Depends(ge
     next_due_iso = (datetime.now(timezone.utc) + timedelta(milliseconds=interval_ms)).isoformat()
     checkin_timer.reset_timer(trip_id)
 
-    # Resolution of overdue/missed state upon safe check-in & next check-in deadline extension
+    # Always update current hardware GPS position in DB & resolution of overdue state upon safe check-in
+    trip_update = {"current_lat": payload.lat, "current_lng": payload.lng}
     if payload.status == "safe":
-        db["trips"].update_one(
-            {"_id": trip_id},
-            {"$set": {"status": "active", "risk_status": "safe", "next_checkin_due": next_due_iso, "expected_arrival": next_due_iso, "checkin_interval_ms": interval_ms}}
-        )
+        trip_update.update({
+            "status": "active",
+            "risk_status": "safe",
+            "next_checkin_due": next_due_iso,
+            "expected_arrival": next_due_iso,
+            "checkin_interval_ms": interval_ms
+        })
+    db["trips"].update_one({"_id": trip_id}, {"$set": trip_update})
 
     if threat_analysis["isDistressed"]:
         alert_id = str(uuid.uuid4())
@@ -596,7 +618,7 @@ async def panic(trip_id: str, payload: PanicPayload, user: dict = Depends(get_cu
 
     trip = db["trips"].find_one({"_id": target_trip_id})
     if trip:
-        db["trips"].update_one({"_id": target_trip_id}, {"$set": {"status": "panic", "risk_status": "critical"}})
+        db["trips"].update_one({"_id": target_trip_id}, {"$set": {"status": "panic", "risk_status": "critical", "current_lat": payload.lat, "current_lng": payload.lng}})
         checkin_timer.clear_timer(target_trip_id)
 
     alert_id = str(uuid.uuid4())

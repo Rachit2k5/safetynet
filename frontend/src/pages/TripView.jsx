@@ -36,10 +36,13 @@ export default function TripView() {
   }, [socket, trip]);
 
   useEffect(() => {
-    if (socket && position && trip) {
-      const interval = setInterval(() => {
-        socket.emit('location:send', { tripId: trip.id, lat: position.lat, lng: position.lng });
-      }, 30000);
+    if (position && trip) {
+      const sendLocation = () => {
+        if (socket) socket.emit('location:send', { tripId: trip.id, lat: position.lat, lng: position.lng });
+        apiPut(`/api/trips/${trip.id}/location`, { lat: position.lat, lng: position.lng }).catch(() => {});
+      };
+      sendLocation();
+      const interval = setInterval(sendLocation, 4000);
       return () => clearInterval(interval);
     }
   }, [socket, position, trip]);
