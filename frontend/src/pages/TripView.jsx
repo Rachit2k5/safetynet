@@ -113,6 +113,16 @@ export default function TripView() {
 
   return (
     <div className="flex-1 flex flex-col p-4 md:p-6 pb-40 relative min-h-screen max-w-2xl mx-auto w-full">
+      <div className="flex items-center justify-between mb-3">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="bg-slate-900/90 hover:bg-slate-800 text-cyan-300 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-700 shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <span>←</span> Back
+        </button>
+        <span className="text-xs text-slate-400 font-mono font-semibold">Active Trip Safety Monitor</span>
+      </div>
+
       {voiceAlertMessage && (
         <div className="bg-red-950 border border-red-500 text-red-200 p-3.5 rounded-xl text-xs mb-4 text-center font-bold animate-pulse shadow-2xl">
           {voiceAlertMessage}

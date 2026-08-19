@@ -23,7 +23,7 @@ export default defineConfig({
         importScripts: ['/custom-sw.js'],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api\//],
+        navigateFallbackDenylist: [/^\/api\//, /^\/uploads\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/[a-c]\.tile\.openstreetmap\.org\/.*/i,
@@ -40,6 +40,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://127.0.0.1:3001',
+      '/uploads': 'http://127.0.0.1:3001',
       '/ws': {
         target: 'ws://127.0.0.1:3001',
         ws: true

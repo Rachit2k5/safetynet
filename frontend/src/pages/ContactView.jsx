@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import MapView from '../components/MapView';
 import AlertBanner from '../components/AlertBanner';
 import { useSocket } from '../hooks/useSocket';
@@ -7,6 +7,7 @@ import { apiGet } from '../services/api';
 
 export default function ContactView() {
   const { id, shareToken } = useParams();
+  const navigate = useNavigate();
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState('');
   const [alert, setAlert] = useState(null);
@@ -64,6 +65,16 @@ export default function ContactView() {
 
   return (
     <div className="max-w-2xl mx-auto w-full p-4 md:p-6 min-h-screen pb-20">
+      <div className="flex items-center justify-between mb-3">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="bg-slate-900/90 hover:bg-slate-800 text-cyan-300 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-700 shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+        >
+          <span>←</span> Back
+        </button>
+        <span className="text-xs text-slate-400 font-mono font-semibold">Shared Safety Feed</span>
+      </div>
+
       <div ref={alertBannerRef} tabIndex={-1} className="outline-none">
         <AlertBanner alert={alert} onDismiss={() => setAlert(null)} />
       </div>

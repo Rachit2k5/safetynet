@@ -6,3 +6,5 @@ pyjwt
 python-dotenv
 requests
 httpx
+pymongo
+dnspython

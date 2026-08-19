@@ -21,11 +21,11 @@ export default function Profile() {
   useEffect(() => {
     if (user?.id) {
       apiGet(`/api/users/${user.id}/contacts`)
-        .then(setContacts)
+        .then(data => setContacts(Array.isArray(data) ? data : []))
         .catch(() => autoRepairProfile(user.name || 'Traveler'));
 
       apiGet(`/api/users/${user.id}/sent_emails`)
-        .then(setSentEmails)
+        .then(data => setSentEmails(Array.isArray(data) ? data : []))
         .catch(() => {});
     }
   }, [user]);
@@ -140,8 +140,8 @@ export default function Profile() {
           <h2 className="text-2xl font-black text-white tracking-tight">Profile & Emergency Setup</h2>
           <p className="text-xs text-slate-400">Configure identity and trusted emergency contacts.</p>
         </div>
-        <button onClick={() => navigate('/')} className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-700">
-          ← Dashboard
+        <button onClick={() => navigate(-1)} className="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700 shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+          ← Back
         </button>
       </div>
 

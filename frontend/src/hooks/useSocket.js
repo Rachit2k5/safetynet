@@ -7,11 +7,30 @@ export const useSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const s = io(SOCKET_URL || '', { path: '/socket.io' });
-    s.on('connect', () => setIsConnected(true));
-    s.on('disconnect', () => setIsConnected(false));
-    setSocket(s);
-    return () => s.disconnect();
+    let s;
+    try {
+      s = io(SOCKET_URL || '', {
+        path: '/socket.io',
+        transports: ['websocket', 'polling'],
+        autoConnect: true,
+        reconnectionAttempts: 5
+      });
+      s.on('connect', () => setIsConnected(true));
+      s.on('disconnect', () => setIsConnected(false));
+      s.on('connect_error', (err) => {
+        console.warn('Socket connection error (continuing gracefully):', err?.message || err);
+        setIsConnected(false);
+      });
+      setSocket(s);
+    } catch (e) {
+      console.warn('Failed to initialize socket:', e);
+    }
+
+    return () => {
+      if (s) {
+        try { s.disconnect(); } catch (e) {}
+      }
+    };
   }, []);
 
   return { socket, isConnected };

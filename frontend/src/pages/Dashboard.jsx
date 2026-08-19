@@ -17,9 +17,11 @@ export default function Dashboard() {
     if (!user) navigate('/profile');
     else {
       apiGet('/api/trips').then(data => {
-        const active = data.find(t => t.status === 'active' || t.status === 'panic' || t.status === 'attention_required' || t.status === 'missed_checkin');
-        if (active) setActiveTrip(active);
-        setRecent(data.filter(t => t.status === 'completed' || t.status === 'cancelled').slice(0, 5));
+        if (Array.isArray(data)) {
+          const active = data.find(t => t && (t.status === 'active' || t.status === 'panic' || t.status === 'attention_required' || t.status === 'missed_checkin'));
+          if (active) setActiveTrip(active);
+          setRecent(data.filter(t => t && (t.status === 'completed' || t.status === 'cancelled')).slice(0, 5));
+        }
       }).catch(() => {});
     }
   }, [user, navigate]);

@@ -3,6 +3,9 @@ import json
 import pymongo
 from pymongo import MongoClient
 
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
+DB_NAME = os.getenv("DB_NAME", "saferoute")
+
 is_vercel = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
 PERSIST_DIR = "/tmp/uploads" if is_vercel else "uploads"
 os.makedirs(PERSIST_DIR, exist_ok=True)

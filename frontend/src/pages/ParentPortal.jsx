@@ -6,9 +6,10 @@ import { useSocket } from '../hooks/useSocket';
 
 const getMediaUrl = (path) => {
   if (!path) return '';
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) return path;
   const baseUrl = import.meta.env.VITE_API_URL || '';
-  return `${baseUrl}${path}`;
+  if (baseUrl) return `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
+  return path;
 };
 
 export default function ParentPortal() {
@@ -180,10 +181,10 @@ export default function ParentPortal() {
       <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-screen hero-gradient text-center">
         <div className="w-full max-w-md mb-4 flex justify-start">
           <button
-            onClick={() => navigate('/')}
-            className="bg-slate-900/90 hover:bg-slate-800 text-cyan-300 px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700/80 shadow-lg transition-all flex items-center gap-1.5"
+            onClick={() => navigate(-1)}
+            className="bg-slate-900/90 hover:bg-slate-800 text-cyan-300 px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700/80 shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <span>←</span> Return to Traveler App
+            <span>←</span> Back
           </button>
         </div>
         <div className="glass-card p-8 border border-slate-700 max-w-md w-full shadow-2xl relative overflow-hidden">
@@ -233,8 +234,8 @@ export default function ParentPortal() {
 
   const child = dashboardData?.child || {};
   const activeTrip = dashboardData?.activeTrip || {};
-  const evidenceVault = dashboardData?.evidenceVault || [];
-  const checkinLogs = dashboardData?.checkinLogs || [];
+  const evidenceVault = Array.isArray(dashboardData?.evidenceVault) ? dashboardData.evidenceVault : [];
+  const checkinLogs = Array.isArray(dashboardData?.checkinLogs) ? dashboardData.checkinLogs : [];
 
   const parseCoord = (val, fallback) => {
     const num = parseFloat(val);
@@ -301,10 +302,10 @@ export default function ParentPortal() {
             </a>
           )}
           <button
-            onClick={() => navigate('/')}
-            className="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1 shadow-md"
+            onClick={() => navigate(-1)}
+            className="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 transition-all flex items-center gap-1 shadow-md cursor-pointer"
           >
-            <span>←</span> Traveler App
+            <span>←</span> Back
           </button>
           <button
             onClick={handleLogout}

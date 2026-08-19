@@ -402,19 +402,22 @@ def get_parent_dashboard(authorization: Optional[str] = Header(None)):
     active_trip = next((t for t in trips if t.get("status") in ["active", "panic", "attention_required"]), trips[0] if trips else None)
 
     # Fetch evidence clips (photos, audio recordings, video clips)
-    alerts = list(db["alerts"].find({}, sort=[("created_at", -1)], limit=20))
-    checkins = list(db["checkins"].find({}, sort=[("created_at", -1)], limit=20))
+    alerts = list(db["alerts"].find({}, sort=[("created_at", -1)], limit=50))
+    checkins = list(db["checkins"].find({}, sort=[("created_at", -1)], limit=50))
 
     evidence_vault = []
     for a in alerts:
-        if a.get("photo_url") or a.get("evidence_url") or a.get("video_url"):
+        photo = a.get("photo_url") or a.get("imageData") or a.get("photoUrl")
+        audio = a.get("evidence_url") or a.get("audioData") or a.get("audioUrl")
+        video = a.get("video_url") or a.get("videoData") or a.get("videoUrl")
+        if photo or audio or video:
             evidence_vault.append({
                 "alertId": a["_id"],
                 "type": a.get("type", "panic"),
                 "severity": a.get("severity", "critical"),
-                "photoUrl": a.get("photo_url"),
-                "audioUrl": a.get("evidence_url"),
-                "videoUrl": a.get("video_url"),
+                "photoUrl": photo,
+                "audioUrl": audio,
+                "videoUrl": video,
                 "lat": a.get("lat"),
                 "lng": a.get("lng"),
                 "createdAt": a.get("created_at")
@@ -819,6 +822,9 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
 
     if update_fields:
         db["alerts"].update_one({"_id": alert_id}, {"$set": update_fields})
+        trip_id = alert.get("trip_id")
+        if trip_id:
+            await broadcast_alert(active_websockets, trip_id, {"type": "alert:evidence", "alertId": alert_id, **update_fields})
 
     return {"success": True, **update_fields}
 
