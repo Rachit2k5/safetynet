@@ -7,19 +7,28 @@
       "config": {
         "distDir": "dist"
       }
+    },
+    {
+      "src": "backend_fastapi/app/main.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "http://127.0.0.1:3001/api/$1"
+      "dest": "backend_fastapi/app/main.py"
     },
     {
-      "handle": "filesystem"
+      "src": "/uploads/(.*)",
+      "dest": "backend_fastapi/app/main.py"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "frontend/dist/assets/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/index.html"
+      "dest": "frontend/dist/index.html"
     }
   ]
 }
