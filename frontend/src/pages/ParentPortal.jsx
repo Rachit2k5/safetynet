@@ -157,6 +157,21 @@ export default function ParentPortal() {
     }
   };
 
+  // Active Loading View while fetching parent dashboard
+  if (loading && !dashboardData) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-screen hero-gradient text-center">
+        <div className="glass-card p-8 border border-slate-700 max-w-sm w-full shadow-2xl flex flex-col items-center justify-center space-y-4">
+          <div className="w-12 h-12 rounded-full border-4 border-cyan-500/30 border-t-cyan-400 animate-spin" />
+          <div>
+            <h3 className="text-base font-bold text-white">Loading Parent Guardian Portal...</h3>
+            <p className="text-xs text-slate-400 mt-1">Authenticating & fetching live traveler GPS feed...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Lock Screen View if not authenticated as parent
   if (!parentToken || !dashboardData) {
     return (
