@@ -163,7 +163,8 @@ def list_contacts(user_id: str, user: dict = Depends(get_current_user)):
 
 @app.delete("/api/users/{user_id}/contacts/{contact_id}")
 def delete_contact(user_id: str, contact_id: str, user: dict = Depends(get_current_user)):
-    db["contacts"].delete_one({"_id": contact_id})
+    target_user_id = user["_id"]
+    db["contacts"].delete_one({"_id": contact_id, "user_id": target_user_id})
     return {"success": True}
 
 # Trip Routes
@@ -266,6 +267,8 @@ async def panic(trip_id: str, payload: PanicPayload):
         latest_checkin = checkins[-1] if checkins else None
         spoken_transcript = latest_checkin.get("message") if latest_checkin else "Emergency Panic Button Pressed"
 
+        smtp_config = user.get("smtp_config") if user else None
+
         for c in contacts:
             if c.get("email"):
                 email_res = send_emergency_email(
@@ -276,7 +279,8 @@ async def panic(trip_id: str, payload: PanicPayload):
                     share_token=share_token,
                     lat=payload.lat,
                     lng=payload.lng,
-                    spoken_transcript=payload.aiReport or spoken_transcript
+                    spoken_transcript=payload.aiReport or spoken_transcript,
+                    smtp_config=smtp_config
                 )
                 db["sent_emails"].insert_one(email_res)
                 emails_sent += 1
