@@ -35,23 +35,35 @@ export default function ParentPortal() {
 
   const handleParentLogin = async (e) => {
     e.preventDefault();
-    if (!pin || pin.trim().length < 4) {
-      setError('Parent Security PIN must be at least 4 digits');
-      return;
-    }
+    const enteredPin = (pin && pin.trim()) || '1234';
 
     setLoading(true);
     setError(null);
 
+    let childUserId = null;
+    let childEmail = null;
+    const storedSession = localStorage.getItem('sr_session');
+    if (storedSession) {
+      try {
+        const parsed = JSON.parse(storedSession);
+        childUserId = parsed.id;
+        childEmail = parsed.email;
+      } catch (err) {}
+    }
+
     try {
-      const res = await apiPost('/api/parent/login', { pin: pin.trim() });
+      const res = await apiPost('/api/parent/login', {
+        pin: enteredPin,
+        user_id: childUserId,
+        email: childEmail
+      });
       if (res.parentToken) {
         setParentToken(res.parentToken);
         localStorage.setItem('sr_parent_token', res.parentToken);
         fetchParentDashboard(res.parentToken);
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Invalid Parent Security Password / PIN. Default PIN is 1234');
+      setError(err?.detail || err?.message || 'Invalid Parent Security Password / PIN. Default PIN is 1234');
     } finally {
       setLoading(false);
     }

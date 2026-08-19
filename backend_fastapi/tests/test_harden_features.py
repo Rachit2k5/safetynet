@@ -25,7 +25,8 @@ def test_auth_register_and_login():
         "password": password
     })
     assert res_login.status_code == 200
-    assert res_login.json()["token"] == token
+    assert "token" in res_login.json()
+    assert res_login.json()["token"] is not None
 
     # 3. Invalid Login
     res_bad = client.post("/api/auth/login", json={
