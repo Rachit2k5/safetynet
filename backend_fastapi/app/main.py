@@ -39,8 +39,10 @@ app.add_middleware(
 )
 
 # Mount uploads directory for audio/video/photo evidence
-os.makedirs("uploads", exist_ok=True)
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+is_vercel = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+UPLOAD_DIR = "/tmp/uploads" if is_vercel else "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Active WebSocket connections dictionary: trip_id -> set of WebSockets
 active_websockets: Dict[str, List[WebSocket]] = {}
@@ -679,7 +681,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
             img_clean = payload.imageData.split(",", 1)[1] if "," in payload.imageData else payload.imageData
             img_clean += '=' * (-len(img_clean) % 4)
             img_name = f"photo_{alert_id}_{int(time.time())}.jpg"
-            img_path = os.path.join("uploads", img_name)
+            img_path = os.path.join(UPLOAD_DIR, img_name)
             with open(img_path, "wb") as f:
                 f.write(base64.b64decode(img_clean))
             update_fields["photo_url"] = f"/uploads/{img_name}"
@@ -691,7 +693,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
             aud_clean = payload.audioData.split(",", 1)[1] if "," in payload.audioData else payload.audioData
             aud_clean += '=' * (-len(aud_clean) % 4)
             aud_name = f"evidence_{alert_id}_{int(time.time())}.webm"
-            aud_path = os.path.join("uploads", aud_name)
+            aud_path = os.path.join(UPLOAD_DIR, aud_name)
             with open(aud_path, "wb") as f:
                 f.write(base64.b64decode(aud_clean))
             update_fields["evidence_url"] = f"/uploads/{aud_name}"
@@ -703,7 +705,7 @@ async def upload_evidence(alert_id: str, payload: EvidencePayload):
             vid_clean = payload.videoData.split(",", 1)[1] if "," in payload.videoData else payload.videoData
             vid_clean += '=' * (-len(vid_clean) % 4)
             vid_name = f"video_{alert_id}_{int(time.time())}.webm"
-            vid_path = os.path.join("uploads", vid_name)
+            vid_path = os.path.join(UPLOAD_DIR, vid_name)
             with open(vid_path, "wb") as f:
                 f.write(base64.b64decode(vid_clean))
             update_fields["video_url"] = f"/uploads/{vid_name}"

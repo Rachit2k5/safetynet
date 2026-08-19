@@ -3,9 +3,10 @@ import json
 import pymongo
 from pymongo import MongoClient
 
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-DB_NAME = os.getenv("MONGODB_DB_NAME", "saferoute")
-PERSIST_FILE = os.path.join("uploads", "db_store.json")
+is_vercel = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+PERSIST_DIR = "/tmp/uploads" if is_vercel else "uploads"
+os.makedirs(PERSIST_DIR, exist_ok=True)
+PERSIST_FILE = os.path.join(PERSIST_DIR, "db_store.json")
 
 class InMemoryMongoCollection:
     """Fall-back BSON/MongoDB collection store with JSON disk persistence."""
