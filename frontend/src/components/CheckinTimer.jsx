@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { apiPut } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
 
-export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, onCheckinSuccess, onAutoPanicTrigger }) {
+export default function CheckinTimer({ deadline, tripId, intervalMs = 300000, onCheckinSuccess, onAutoPanicTrigger }) {
+  const [userIntervalMs, setUserIntervalMs] = useState(intervalMs);
+  const [selectedMinutes, setSelectedMinutes] = useState(Math.round(intervalMs / 60000) || 5);
+  
   const [targetTime, setTargetTime] = useState(() => {
     const d = deadline ? new Date(deadline).getTime() : 0;
-    return (d > Date.now()) ? d : Date.now() + intervalMs;
+    return (d > Date.now()) ? d : Date.now() + userIntervalMs;
   });
   const [timeLeft, setTimeLeft] = useState(() => Math.max(0, targetTime - Date.now()));
   const [message, setMessage] = useState('');
@@ -15,7 +18,7 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
   const { position } = useGeolocation();
   const recognitionRef = useRef(null);
 
-  // Synchronize target time when deadline prop updates
+  // Synchronize target time when deadline prop or user interval updates
   useEffect(() => {
     if (deadline) {
       const d = new Date(deadline).getTime();
@@ -24,6 +27,16 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
       }
     }
   }, [deadline]);
+
+  const handleSetUserInterval = (mins) => {
+    const validMins = Math.max(1, parseInt(mins, 10) || 1);
+    const newMs = validMins * 60 * 1000;
+    setSelectedMinutes(validMins);
+    setUserIntervalMs(newMs);
+    const newTarget = Date.now() + newMs;
+    setTargetTime(newTarget);
+    setTimeLeft(newMs);
+  };
 
   // Real-time 1-second countdown tick
   useEffect(() => {
@@ -98,10 +111,10 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
         lng: position?.lng || 77.2090
       });
 
-      // Reset target countdown time to future interval (15 mins)
-      const nextTarget = Date.now() + intervalMs;
+      // Reset target countdown time to user's selected interval
+      const nextTarget = Date.now() + userIntervalMs;
       setTargetTime(nextTarget);
-      setTimeLeft(intervalMs);
+      setTimeLeft(userIntervalMs);
 
       if (res.details?.contradictionFlag) {
         setDistressAlert('⚠️ Warning: Latent distress keywords detected in your message. A soft alert has been raised to your contacts.');
@@ -133,6 +146,36 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
         </button>
       </div>
 
+      {/* User-Selectable Check-in Interval Selector Controls */}
+      <div className="flex items-center justify-center gap-1.5 my-3 bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+        <span className="text-[11px] text-slate-400 font-semibold mr-1">Check-in Interval:</span>
+        {[3, 5, 10, 15, 30].map(mins => (
+          <button
+            key={mins}
+            type="button"
+            onClick={() => handleSetUserInterval(mins)}
+            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all border ${
+              selectedMinutes === mins 
+                ? 'bg-sr-info text-slate-950 border-cyan-400 shadow-md font-black' 
+                : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
+            }`}
+          >
+            {mins}m
+          </button>
+        ))}
+        <div className="flex items-center gap-1 ml-1">
+          <input
+            type="number"
+            min="1"
+            max="1440"
+            value={selectedMinutes}
+            onChange={e => handleSetUserInterval(e.target.value)}
+            className="w-12 bg-slate-800 border border-slate-700 rounded-lg py-1 text-center text-xs text-white outline-none focus:ring-1 focus:ring-sr-info font-mono font-bold"
+          />
+          <span className="text-[10px] text-slate-400">m</span>
+        </div>
+      </div>
+
       <div className={`text-4xl font-black font-mono my-3 transition-colors ${isOverdue ? 'text-red-500 animate-pulse' : 'text-white'}`}>
         {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
       </div>
@@ -151,7 +194,7 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
 
       {status === 'confirmed' && (
         <div className="bg-sr-safe text-white p-2.5 rounded-xl text-xs font-bold mb-4 shadow">
-          ✓ Check-in Confirmed! Timer reset for next interval.
+          ✓ Check-in Confirmed! Reset for {selectedMinutes}m interval.
         </div>
       )}
 
@@ -165,7 +208,7 @@ export default function CheckinTimer({ deadline, tripId, intervalMs = 900000, on
         />
 
         <button type="submit" className="btn-safe w-full py-3 rounded-xl font-bold text-sm shadow-lg hover:brightness-110 transition-all">
-          ✓ I'M SAFE — CONFIRM CHECK-IN
+          ✓ I'M SAFE — CONFIRM CHECK-IN ({selectedMinutes}m)
         </button>
       </form>
     </div>

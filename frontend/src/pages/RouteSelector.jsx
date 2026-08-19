@@ -11,6 +11,7 @@ export default function RouteSelector() {
   const [destination, setDestination] = useState('West Hostel');
   const [destCoords, setDestCoords] = useState({ lat: 28.6180, lng: 77.2150 });
   const [hour, setHour] = useState(new Date().getHours());
+  const [checkinMinutes, setCheckinMinutes] = useState(5);
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -87,6 +88,8 @@ export default function RouteSelector() {
       const endLat = waypoints[waypoints.length - 1]?.lat || 28.6180;
       const endLng = waypoints[waypoints.length - 1]?.lng || 77.2150;
 
+      const intervalMs = (parseInt(checkinMinutes, 10) || 5) * 60 * 1000;
+
       const res = await apiPost('/api/trips', {
         origin: origin || 'Current Location',
         destination: `${destination} (${routeName})`,
@@ -94,7 +97,7 @@ export default function RouteSelector() {
         origin_lng: startLng,
         dest_lat: endLat,
         dest_lng: endLng,
-        checkin_interval_ms: 900000 // 15 min
+        checkin_interval_ms: intervalMs
       });
       navigate(`/trip/${res.id}`);
     } catch (err) {
@@ -148,6 +151,38 @@ export default function RouteSelector() {
             className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm outline-none focus:ring-2 focus:ring-sr-info"
             required
           />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-slate-300 mb-1">⏱️ User-Defined Check-in Timer Interval</label>
+          <div className="flex gap-2 mb-2">
+            {[3, 5, 10, 15, 30].map(mins => (
+              <button
+                key={mins}
+                type="button"
+                onClick={() => setCheckinMinutes(mins)}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
+                  checkinMinutes === mins 
+                    ? 'bg-sr-info text-slate-950 border-cyan-400 font-black shadow-md' 
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                }`}
+              >
+                {mins}m
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs text-slate-400">Custom Interval:</span>
+            <input
+              type="number"
+              min="1"
+              max="1440"
+              value={checkinMinutes}
+              onChange={e => setCheckinMinutes(Math.max(1, parseInt(e.target.value) || 1))}
+              className="w-24 bg-slate-800 border border-slate-700 rounded-lg p-2 text-white text-xs text-center outline-none focus:ring-2 focus:ring-sr-info font-mono font-bold"
+            />
+            <span className="text-xs text-slate-400">minutes</span>
+          </div>
         </div>
 
         <div>
@@ -221,7 +256,7 @@ export default function RouteSelector() {
                   onClick={() => handleStartTrip(item.name, item.scoreData.waypoints || [])} 
                   className="w-full btn-safe py-3 rounded-lg font-bold text-sm"
                 >
-                  Select & Start Safety Trip
+                  Select & Start Safety Trip ({checkinMinutes}m Check-in)
                 </button>
               </div>
             </div>
