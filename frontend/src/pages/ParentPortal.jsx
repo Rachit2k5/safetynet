@@ -217,8 +217,26 @@ export default function ParentPortal() {
   const evidenceVault = dashboardData.evidenceVault || [];
   const checkinLogs = dashboardData.checkinLogs || [];
 
-  const currentLat = activeTrip.current_lat || activeTrip.origin_lat || 28.6139;
-  const currentLng = activeTrip.current_lng || activeTrip.origin_lng || 77.2090;
+  const [fetchingGps, setFetchingGps] = useState(false);
+  const [gpsSyncMsg, setGpsSyncMsg] = useState('');
+
+  const handleFetchTravelerGps = async () => {
+    setFetchingGps(true);
+    setGpsSyncMsg('');
+    try {
+      if (socket && dashboardData?.activeTrip?.id) {
+        socket.emit('location:request', { tripId: dashboardData.activeTrip.id });
+      }
+      await fetchParentDashboard(parentToken, false);
+      const timeStr = new Date().toLocaleTimeString();
+      setGpsSyncMsg(`Hardware GPS successfully fetched from traveler app at ${timeStr}! (${currentLat.toFixed(6)}, ${currentLng.toFixed(6)})`);
+      setTimeout(() => setGpsSyncMsg(''), 5000);
+    } catch (err) {
+      console.error('Failed to fetch traveler GPS:', err);
+    } finally {
+      setFetchingGps(false);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col p-4 md:p-6 pb-28 min-h-screen hero-gradient max-w-4xl mx-auto w-full">
@@ -252,18 +270,40 @@ export default function ParentPortal() {
 
       {/* Live GPS Map View */}
       <div className="glass-card p-4 mb-6 border border-slate-700/80 shadow-xl">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <span>📍</span> Real-Time Hardware GPS Location
-          </h2>
-          <span className={`px-2.5 py-1 rounded-lg text-xs font-bold uppercase ${
-            activeTrip.status === 'panic' ? 'bg-red-600 text-white animate-pulse' :
-            activeTrip.status === 'attention_required' ? 'bg-amber-600 text-white' :
-            'bg-emerald-950 text-emerald-300 border border-emerald-800/40'
-          }`}>
-            Status: {activeTrip.status || 'Active Safety Monitoring'}
-          </span>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+          <div>
+            <h2 className="text-sm font-bold text-white flex items-center gap-2">
+              <span>📍</span> Real-Time Hardware GPS Location
+            </h2>
+            <p className="text-[11px] text-slate-400">
+              Live GPS Position: <strong className="text-cyan-300 font-mono">({currentLat.toFixed(6)}, {currentLng.toFixed(6)})</strong>
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              onClick={handleFetchTravelerGps}
+              disabled={fetchingGps}
+              className="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg border border-emerald-400 flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
+            >
+              <span>📡</span> {fetchingGps ? 'Fetching Traveler GPS...' : 'Fetch Live Traveler GPS'}
+            </button>
+
+            <span className={`px-2.5 py-1 rounded-lg text-xs font-bold uppercase ${
+              activeTrip.status === 'panic' ? 'bg-red-600 text-white animate-pulse' :
+              activeTrip.status === 'attention_required' ? 'bg-amber-600 text-white' :
+              'bg-emerald-950 text-emerald-300 border border-emerald-800/40'
+            }`}>
+              {activeTrip.status || 'Active Safety Monitoring'}
+            </span>
+          </div>
         </div>
+
+        {gpsSyncMsg && (
+          <div className="mb-3 bg-emerald-950/90 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow">
+            <span>✓</span> {gpsSyncMsg}
+          </div>
+        )}
 
         <div className="h-72 rounded-2xl overflow-hidden border border-slate-800 shadow-inner">
           <MapView

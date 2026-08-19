@@ -43,7 +43,18 @@ export default function TripView() {
       };
       sendLocation();
       const interval = setInterval(sendLocation, 4000);
-      return () => clearInterval(interval);
+
+      if (socket) {
+        socket.on('location:request', () => {
+          console.log('📡 Parent requested live GPS fetch from traveler app. Transmitting coordinates...');
+          sendLocation();
+        });
+      }
+
+      return () => {
+        clearInterval(interval);
+        if (socket) socket.off('location:request');
+      };
     }
   }, [socket, position, trip]);
 
