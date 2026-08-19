@@ -2,9 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MapView from '../components/MapView';
 import { apiPost, apiGet, apiPut } from '../services/api';
+import { useSocket } from '../hooks/useSocket';
+
+const getMediaUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  const baseUrl = import.meta.env.VITE_API_URL || '';
+  return `${baseUrl}${path}`;
+};
 
 export default function ParentPortal() {
   const navigate = useNavigate();
+  const { socket } = useSocket();
   const [parentToken, setParentToken] = useState(() => localStorage.getItem('sr_parent_token') || '');
   const [pin, setPin] = useState('');
   const [error, setError] = useState(null);
@@ -14,14 +23,8 @@ export default function ParentPortal() {
   const [pinMsg, setPinMsg] = useState('');
   const [pinErr, setPinErr] = useState('');
 
-  useEffect(() => {
-    if (parentToken) {
-      fetchParentDashboard(parentToken);
-    }
-  }, [parentToken]);
-
-  const fetchParentDashboard = async (token) => {
-    setLoading(true);
+  const fetchParentDashboard = async (token, showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const res = await apiGet('/api/parent/dashboard', {
         headers: { Authorization: `Bearer ${token}` }
@@ -30,13 +33,65 @@ export default function ParentPortal() {
       setError(null);
     } catch (err) {
       console.error('Parent dashboard fetch error:', err);
-      setError('Parent session expired or invalid. Please re-enter Parent Security PIN.');
-      setParentToken('');
-      localStorage.removeItem('sr_parent_token');
+      if (showLoading) {
+        setError('Parent session expired or invalid. Please re-enter Parent Security PIN.');
+        setParentToken('');
+        localStorage.removeItem('sr_parent_token');
+      }
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!parentToken) return;
+
+    fetchParentDashboard(parentToken, true);
+
+    // Auto-poll every 3 seconds for real-time live GPS hardware sync
+    const timer = setInterval(() => {
+      fetchParentDashboard(parentToken, false);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [parentToken]);
+
+  useEffect(() => {
+    if (socket && dashboardData?.activeTrip?.id) {
+      const tripId = dashboardData.activeTrip.id;
+      socket.emit('trip:join', tripId);
+
+      socket.on('location:update', (loc) => {
+        setDashboardData(prev => {
+          if (!prev || !prev.activeTrip) return prev;
+          return {
+            ...prev,
+            activeTrip: {
+              ...prev.activeTrip,
+              current_lat: loc.lat,
+              current_lng: loc.lng
+            }
+          };
+        });
+      });
+
+      socket.on('alert:new', () => {
+        if (parentToken) fetchParentDashboard(parentToken, false);
+      });
+
+      socket.on('alert:evidence', () => {
+        if (parentToken) fetchParentDashboard(parentToken, false);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('location:update');
+        socket.off('alert:new');
+        socket.off('alert:evidence');
+      }
+    };
+  }, [socket, dashboardData?.activeTrip?.id, parentToken]);
 
   const handleParentLogin = async (e) => {
     e.preventDefault();
@@ -257,7 +312,7 @@ export default function ParentPortal() {
                   <div>
                     <p className="text-[11px] font-bold text-slate-300 mb-1">📸 Camera Snapshot Photo:</p>
                     <img
-                      src={`http://localhost:3001${item.photoUrl}`}
+                      src={getMediaUrl(item.photoUrl)}
                       alt="Incident Snapshot"
                       className="w-full h-40 object-cover rounded-lg border border-red-500/50 shadow"
                     />
@@ -270,7 +325,7 @@ export default function ParentPortal() {
                     <p className="text-[11px] font-bold text-cyan-300 mb-1">🎙️ Audio Evidence Recording:</p>
                     <audio
                       controls
-                      src={`http://localhost:3001${item.audioUrl}`}
+                      src={getMediaUrl(item.audioUrl)}
                       className="w-full h-9 rounded-lg"
                     />
                   </div>
@@ -282,7 +337,7 @@ export default function ParentPortal() {
                     <p className="text-[11px] font-bold text-rose-400 mb-1">🎥 Live Incident Video Recording:</p>
                     <video
                       controls
-                      src={`http://localhost:3001${item.videoUrl}`}
+                      src={getMediaUrl(item.videoUrl)}
                       className="w-full h-44 object-cover rounded-lg border border-rose-500/50 bg-black"
                     />
                   </div>
