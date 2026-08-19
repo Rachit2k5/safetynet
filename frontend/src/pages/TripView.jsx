@@ -127,7 +127,10 @@ export default function TripView() {
         />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 p-4 flex justify-center pb-6 z-40">
+      {/* Bottom Spacer so content is never blocked by fixed emergency button */}
+      <div className="h-44 w-full flex-shrink-0" aria-hidden="true" />
+
+      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/80 p-4 flex justify-center pb-6 z-40">
         <PanicButton tripId={trip.id} />
       </div>
     </div>

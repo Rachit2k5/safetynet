@@ -50,7 +50,7 @@ export default function App() {
           </div>
 
           {/* App Container with Auto-Adjusting Mobile Device Aspect Ratio */}
-          <div className={`w-full transition-all duration-300 ${aspectMode === 'full' ? 'max-w-5xl' : 'max-w-md md:rounded-[40px] md:border-4 md:border-slate-800 md:shadow-[0_0_50px_rgba(0,0,0,0.8)] md:my-2'} bg-[#0a0e1a] min-h-screen relative overflow-hidden flex flex-col`}>
+          <div className={`w-full transition-all duration-300 ${aspectMode === 'full' ? 'max-w-5xl' : 'max-w-md md:rounded-[40px] md:border-4 md:border-slate-800 md:shadow-[0_0_50px_rgba(0,0,0,0.8)] md:my-2'} bg-[#0a0e1a] min-h-screen relative overflow-y-auto flex flex-col`}>
             
             <Routes>
               <Route path="/" element={<Dashboard />} />
