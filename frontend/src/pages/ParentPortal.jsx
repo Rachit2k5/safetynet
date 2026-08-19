@@ -227,10 +227,18 @@ export default function ParentPortal() {
       if (socket && dashboardData?.activeTrip?.id) {
         socket.emit('location:request', { tripId: dashboardData.activeTrip.id });
       }
-      await fetchParentDashboard(parentToken, false);
+      const freshData = await apiGet('/api/parent/dashboard', {
+        headers: { Authorization: `Bearer ${parentToken}` }
+      });
+      setDashboardData(freshData);
+      
+      const trip = freshData?.activeTrip || {};
+      const updatedLat = trip.current_lat || trip.latestCheckin?.lat || trip.origin_lat || 28.6139;
+      const updatedLng = trip.current_lng || trip.latestCheckin?.lng || trip.origin_lng || 77.2090;
+
       const timeStr = new Date().toLocaleTimeString();
-      setGpsSyncMsg(`Hardware GPS successfully fetched from traveler app at ${timeStr}! (${currentLat.toFixed(6)}, ${currentLng.toFixed(6)})`);
-      setTimeout(() => setGpsSyncMsg(''), 5000);
+      setGpsSyncMsg(`Live Hardware GPS fetched from traveler app at ${timeStr}! (${updatedLat.toFixed(6)}, ${updatedLng.toFixed(6)})`);
+      setTimeout(() => setGpsSyncMsg(''), 6000);
     } catch (err) {
       console.error('Failed to fetch traveler GPS:', err);
     } finally {
