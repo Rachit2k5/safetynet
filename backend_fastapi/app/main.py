@@ -1,7 +1,10 @@
-import uuid
 import os
+import uuid
 import time
 from datetime import datetime, timezone
+from dotenv import load_dotenv
+
+load_dotenv()
 from fastapi import FastAPI, HTTPException, Header, Depends, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

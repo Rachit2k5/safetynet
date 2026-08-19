@@ -3,6 +3,9 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime, timezone
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def send_emergency_email(
     to_email: str,
