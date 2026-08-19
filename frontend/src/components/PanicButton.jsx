@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { queueAction } from '../services/offlineQueue';
 import { apiPost, apiPut } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
+import { captureLiveCameraPhoto } from '../utils/camera';
 
 export default function PanicButton({ tripId }) {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -15,30 +16,19 @@ export default function PanicButton({ tripId }) {
     canvas.width = 640;
     canvas.height = 480;
     const ctx = canvas.getContext('2d');
-
-    // Draw Dark Emergency Graphic Canvas Image
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, 640, 480);
-
     ctx.fillStyle = '#ef4444';
     ctx.font = 'bold 28px sans-serif';
     ctx.fillText('🚨 EMERGENCY SNAPSHOT AT PANIC TRIGGER', 30, 60);
-
     ctx.fillStyle = '#06b6d4';
     ctx.font = '20px monospace';
     ctx.fillText(`GPS Latitude:  ${lat.toFixed(6)}`, 40, 140);
     ctx.fillText(`GPS Longitude: ${lng.toFixed(6)}`, 40, 180);
     ctx.fillText(`Timestamp: ${new Date().toLocaleString()}`, 40, 220);
-
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '16px sans-serif';
-    ctx.fillText('Automated hardware snapshot & distress alert dispatched', 40, 280);
-
-    // Draw Red Alert Border
     ctx.strokeStyle = '#ef4444';
     ctx.lineWidth = 12;
     ctx.strokeRect(6, 6, 628, 468);
-
     return canvas.toDataURL('image/jpeg', 0.85);
   };
 
@@ -47,29 +37,12 @@ export default function PanicButton({ tripId }) {
     let imageData = null;
     let audioData = null;
 
-    // 1. Capture Real Camera Snapshot Photo (with canvas fallback)
+    // 1. Capture Real Camera Snapshot Photo
     try {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-        const video = document.createElement('video');
-        video.srcObject = videoStream;
-        await video.play();
-
-        await new Promise(r => setTimeout(r, 400));
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        imageData = canvas.toDataURL('image/jpeg', 0.8);
-
-        videoStream.getTracks().forEach(track => track.stop());
-      }
+      imageData = await captureLiveCameraPhoto();
+      console.log('✓ Real hardware camera photo snapshot captured!');
     } catch (err) {
-      console.warn('Real camera blocked/unavailable; using emergency canvas photo fallback.');
-    }
-
-    if (!imageData) {
+      console.warn('Real camera error; fallback canvas used:', err);
       imageData = generateFallbackPhoto(lat, lng);
     }
 

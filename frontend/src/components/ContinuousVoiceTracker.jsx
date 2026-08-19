@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { apiPut, apiPost } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
+import { captureLiveCameraPhoto } from '../utils/camera';
 
 export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) {
   const [isListening, setIsListening] = useState(false);
@@ -13,25 +14,11 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
   // Auto-activate camera snapshot when distress word is recognized
   const captureDistressPhoto = async () => {
     try {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-        const video = document.createElement('video');
-        video.srcObject = stream;
-        await video.play();
-
-        await new Promise(r => setTimeout(r, 400));
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/jpeg', 0.85);
-
-        stream.getTracks().forEach(t => t.stop());
-        return imageData;
-      }
+      const imageData = await captureLiveCameraPhoto();
+      console.log('✓ Real camera photo snapshot captured upon AI distress recognition');
+      return imageData;
     } catch (err) {
-      console.warn('Camera access error during auto-snapshot:', err);
+      console.warn('Camera access error during auto-snapshot; fallback canvas used:', err);
     }
 
     // Canvas fallback photo if camera stream is blocked

@@ -237,6 +237,21 @@
       "share_token": "e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
       "checkin_interval_ms": 900000,
       "started_at": "2026-08-19T05:48:31.858950+00:00"
+    },
+    {
+      "_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "user_id": "c60424d7-426d-4a9b-b6d2-c640ce2d342e",
+      "origin": "Current Location (30.2514, 77.0446)",
+      "destination": "West Hostel (Current Location (30.2514, 77.0446) -> West Hostel (Main Lit Highway))",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "expected_arrival": "2026-08-19T06:22:15.675107+00:00",
+      "status": "panic",
+      "share_token": "947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "checkin_interval_ms": 900000,
+      "started_at": "2026-08-19T05:52:15.675091+00:00"
     }
   ],
   "checkins": [
@@ -336,6 +351,36 @@
       "created_at": "2026-08-19T05:48:54.573066+00:00",
       "photo_url": "/uploads/photo_6210e137-209f-4e8e-897e-41926084e002_1787118538.jpg",
       "evidence_url": "/uploads/evidence_6210e137-209f-4e8e-897e-41926084e002_1787118538.webm"
+    },
+    {
+      "_id": "3360066d-1e48-47da-b0e3-24b181b41632",
+      "trip_id": "54c1d149-1a61-433c-ae38-8f50fc55cd8c",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.251438909611128,
+      "lng": 77.044517306041,
+      "created_at": "2026-08-19T05:51:43.363191+00:00",
+      "photo_url": "/uploads/photo_3360066d-1e48-47da-b0e3-24b181b41632_1787118706.jpg",
+      "evidence_url": "/uploads/evidence_3360066d-1e48-47da-b0e3-24b181b41632_1787118706.webm"
+    },
+    {
+      "_id": "dd63b587-7268-40ce-8b43-6f648afbeeaa",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.25147839658703,
+      "lng": 77.04444409086425,
+      "created_at": "2026-08-19T05:52:19.000391+00:00",
+      "photo_url": "/uploads/photo_dd63b587-7268-40ce-8b43-6f648afbeeaa_1787118739.jpg"
+    },
+    {
+      "_id": "9b36876a-bea2-4a8a-8e5a-50303b98300d",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.25147839658703,
+      "lng": 77.04444409086425,
+      "created_at": "2026-08-19T05:52:19.310509+00:00"
     }
   ],
   "sent_emails": [
@@ -360,6 +405,61 @@
       "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
       "deliveredAt": "2026-08-19T05:48:58.681371+00:00",
       "_id": "d73e1046-5c0e-46b7-853e-b28708c9414e"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/54c1d149-1a61-433c-ae38-8f50fc55cd8c/status/e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Panic Button Pressed",
+      "deliveredAt": "2026-08-19T05:51:43.365233+00:00",
+      "_id": "68f43eee-5b31-429d-8d6a-6cc11bc01750"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/54c1d149-1a61-433c-ae38-8f50fc55cd8c/status/e6adcc77-9cdc-4ca0-8fab-57808942ccb4",
+      "photoUrl": "http://localhost:3001/uploads/photo_3360066d-1e48-47da-b0e3-24b181b41632_1787118706.jpg",
+      "audioUrl": "http://localhost:3001/uploads/evidence_3360066d-1e48-47da-b0e3-24b181b41632_1787118706.webm",
+      "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
+      "deliveredAt": "2026-08-19T05:51:46.938405+00:00",
+      "_id": "dd1263b9-ed94-48a3-916a-fcaf7da04f0b"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "[AI THREAT REPORT - 11:22:18 am]\nDistress Keyword Triggered: \"HELP\"\nSpoken Sentence: \"HELP! Emergency situation!\"\nAI Threat Intensity: HIGH (0.98)\nGPS Coordinates: (30.251478, 77.044444)\nAction Taken: Auto-captured camera photo snapshot & dispatched emergency email to parents/contacts.",
+      "deliveredAt": "2026-08-19T05:52:19.002977+00:00",
+      "_id": "d6f9389f-13bc-4904-a5ee-e5120a2b04f8"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": "http://localhost:3001/uploads/photo_dd63b587-7268-40ce-8b43-6f648afbeeaa_1787118739.jpg",
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
+      "deliveredAt": "2026-08-19T05:52:19.046942+00:00",
+      "_id": "93d24885-e7d7-4edf-8142-4debd2fe72d1"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Panic Button Pressed",
+      "deliveredAt": "2026-08-19T05:52:19.312535+00:00",
+      "_id": "5c39b10d-2290-4ae3-8c8d-4f29568ce1b1"
     }
   ]
 }
