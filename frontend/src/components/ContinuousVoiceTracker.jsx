@@ -169,25 +169,6 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
         </div>
       )}
 
-      {/* Manual AI Distress Simulator Buttons */}
-      <div className="my-2 p-2 bg-slate-900/80 rounded-xl border border-slate-800 flex flex-wrap gap-2 justify-center">
-        <span className="w-full text-[10px] text-slate-400 font-bold uppercase tracking-wider text-center">Test Auto Camera Snap & Email Dispatch:</span>
-        <button
-          type="button"
-          onClick={() => handleDistressTrigger('Someone is following me down the street!', 'following me')}
-          className="bg-red-900/80 hover:bg-red-800 text-red-100 border border-red-700/60 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow"
-        >
-          📸 Auto-Snap Camera & Say "FOLLOWING ME"
-        </button>
-        <button
-          type="button"
-          onClick={() => handleDistressTrigger('HELP! Emergency situation!', 'help')}
-          className="bg-amber-900/80 hover:bg-amber-800 text-amber-100 border border-amber-700/60 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow"
-        >
-          📸 Auto-Snap Camera & Say "HELP"
-        </button>
-      </div>
-
       <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
         {transcripts.map(t => (
           <div 
@@ -206,7 +187,7 @@ export default function ContinuousVoiceTracker({ tripId, onEmergencyDetected }) 
 
         {transcripts.length === 0 && (
           <p className="text-xs text-slate-500 italic text-center py-4">
-            Speak aloud or test the buttons above. When suspicious words are spoken, AI automatically opens camera, snaps photo & emails parents/contacts.
+            Hands-free voice monitoring active. Spoken distress words automatically open camera, snap photo & dispatch emergency alerts to trusted contacts.
           </p>
         )}
       </div>

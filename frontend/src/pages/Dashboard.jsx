@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import { apiGet } from '../services/api';
 import { useGeolocation } from '../hooks/useGeolocation';
+import EmergencyServices from '../components/EmergencyServices';
 
 export default function Dashboard() {
   const { user } = useContext(UserContext);
@@ -28,7 +29,7 @@ export default function Dashboard() {
       <header className="flex justify-between items-center mb-6 pt-2">
         <div>
           <h1 className="text-3xl font-black text-white tracking-tight flex items-center gap-2">
-            <span>🛡️</span> SafeRoute
+            <span aria-hidden="true">🛡️</span> SafeRoute
           </h1>
           <p className="text-xs text-slate-400 font-medium mt-0.5">AI Personal Safety Companion</p>
         </div>
@@ -76,7 +77,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="glass-card p-6 border border-slate-700/80 shadow-xl relative overflow-hidden text-center">
-            <div className="text-4xl mb-3">🗺️</div>
+            <div className="text-4xl mb-3" aria-hidden="true">🗺️</div>
             <h2 className="text-xl font-bold text-white mb-2">Plan a Safe Route</h2>
             <p className="text-xs text-slate-300 mb-6 leading-relaxed max-w-sm mx-auto">
               Analyze lighting, past incident density, and time-of-day risks from your GPS coordinates.
@@ -91,21 +92,24 @@ export default function Dashboard() {
       {/* Quick Action Grid */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <Link to="/routes" className="glass-card p-4 border border-slate-700/70 hover:border-sr-info transition-all flex flex-col justify-between group">
-          <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">🧭</div>
+          <div className="text-2xl mb-2 group-hover:scale-110 transition-transform" aria-hidden="true">🧭</div>
           <div>
             <h3 className="font-bold text-white text-sm">Route Scoring</h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">Multi-factor AI risk engine</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">Multi-factor risk engine</p>
           </div>
         </Link>
 
         <Link to="/profile" className="glass-card p-4 border border-slate-700/70 hover:border-emerald-500 transition-all flex flex-col justify-between group">
-          <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">👥</div>
+          <div className="text-2xl mb-2 group-hover:scale-110 transition-transform" aria-hidden="true">👥</div>
           <div>
             <h3 className="font-bold text-white text-sm">Trusted Contacts</h3>
             <p className="text-[11px] text-slate-400 mt-0.5">Instant email & audio alert network</p>
           </div>
         </Link>
       </div>
+
+      {/* Nearest Police Stations & Official Emergency Helplines */}
+      <EmergencyServices position={position} />
 
       {/* Recent Trips List */}
       <div className="mb-6">

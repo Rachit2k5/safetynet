@@ -12,12 +12,6 @@ export default function Profile() {
   const [cEmail, setCEmail] = useState('');
   const [cPhone, setCPhone] = useState('');
   
-  // SMTP Configuration State
-  const [smtpUser, setSmtpUser] = useState(user?.smtp_config?.user || '');
-  const [smtpPass, setSmtpPass] = useState(user?.smtp_config?.pass || '');
-  const [smtpHost, setSmtpHost] = useState(user?.smtp_config?.host || 'smtp.gmail.com');
-  const [smtpPort, setSmtpPort] = useState(user?.smtp_config?.port || '587');
-
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const navigate = useNavigate();
@@ -59,21 +53,6 @@ export default function Profile() {
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
       setError('Failed to save profile.');
-    }
-  };
-
-  const handleSaveSmtp = async (e) => {
-    e.preventDefault();
-    setError('');
-    try {
-      const smtp_config = { host: smtpHost, port: parseInt(smtpPort, 10), user: smtpUser, pass: smtpPass };
-      const updatedUser = { ...user, smtp_config };
-      localStorage.setItem('sr_session', JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      setSuccessMsg('✓ SMTP Gmail/Email credentials saved for real email delivery!');
-      setTimeout(() => setSuccessMsg(''), 4000);
-    } catch (err) {
-      setError('Failed to save SMTP configuration.');
     }
   };
 
@@ -137,7 +116,7 @@ export default function Profile() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-black text-white tracking-tight">Profile & Emergency Setup</h2>
-          <p className="text-xs text-slate-400">Configure identity, contacts, and real email delivery.</p>
+          <p className="text-xs text-slate-400">Configure identity and trusted emergency contacts.</p>
         </div>
         <button onClick={() => navigate('/')} className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-700">
           ← Dashboard
@@ -224,28 +203,6 @@ export default function Profile() {
         ) : (
           <p className="text-xs text-amber-400 mt-2 text-center">Maximum limit of 3 trusted contacts reached.</p>
         )}
-      </div>
-
-      {/* Optional Real Gmail / SMTP Email Delivery Setup */}
-      <div className="glass-card p-6 mb-6 border border-slate-700/80 shadow-xl">
-        <h3 className="font-bold text-base text-white mb-1 flex items-center gap-2">
-          <span>📧</span> Real SMTP Email Delivery Config (Optional)
-        </h3>
-        <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-          Default mode logs dispatches to the audit log below. To send real emails to Gmail inboxes, enter your Gmail/SMTP App Password:
-        </p>
-
-        <form onSubmit={handleSaveSmtp} className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <input type="text" placeholder="SMTP Host (smtp.gmail.com)" value={smtpHost} onChange={e => setSmtpHost(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" />
-            <input type="text" placeholder="SMTP Port (587)" value={smtpPort} onChange={e => setSmtpPort(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" />
-          </div>
-          <input type="email" placeholder="Your Gmail Address (e.g. myname@gmail.com)" value={smtpUser} onChange={e => setSmtpUser(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" />
-          <input type="password" placeholder="Gmail App Password" value={smtpPass} onChange={e => setSmtpPass(e.target.value)} className="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none" />
-          <button type="submit" className="bg-slate-800 hover:bg-slate-700 text-sr-info border border-slate-700 w-full py-2.5 rounded-xl font-bold text-xs">
-            Save SMTP Credentials
-          </button>
-        </form>
       </div>
 
       {/* Emergency Email Dispatch Audit Log */}

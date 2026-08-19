@@ -127,24 +127,7 @@ export default function CheckinTimer({ deadline, tripId, onCheckinSuccess, onAut
         </div>
       )}
 
-      {/* Quick Voice AI Emergency Simulator Buttons */}
-      <div className="my-3 p-2 bg-slate-900/80 rounded-xl border border-slate-800 flex flex-wrap gap-2 justify-center">
-        <span className="w-full text-[10px] text-slate-400 uppercase font-bold tracking-wider">Test Voice AI Recognition Instant Trigger:</span>
-        <button
-          type="button"
-          onClick={() => triggerVoiceEmergency('HELP')}
-          className="bg-red-900/60 hover:bg-red-800 text-red-200 border border-red-700/50 px-2.5 py-1 rounded-lg text-xs font-semibold transition"
-        >
-          🚨 Say "HELP"
-        </button>
-        <button
-          type="button"
-          onClick={() => triggerVoiceEmergency('FOLLOWING ME')}
-          className="bg-amber-900/60 hover:bg-amber-800 text-amber-200 border border-amber-700/50 px-2.5 py-1 rounded-lg text-xs font-semibold transition"
-        >
-          ⚠️ Say "FOLLOWING ME"
-        </button>
-      </div>
+
 
       <form onSubmit={handleCheckin} className="space-y-3 mt-4">
         <input

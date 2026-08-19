@@ -133,6 +133,36 @@
       "name": "Traveler",
       "session_token": "662a25d4-d831-44a4-82dc-6dda7bffe553",
       "created_at": "2026-08-19T05:47:12.780859+00:00"
+    },
+    {
+      "_id": "bd16ea9e-d185-4e78-91e7-a38da956f957",
+      "name": "Test User",
+      "session_token": "6f25d3c4-70aa-4a2e-b940-c32ae1792995",
+      "created_at": "2026-08-19T06:19:04.376163+00:00"
+    },
+    {
+      "_id": "63586b31-a1e0-4315-b015-1fe4c61a4a7c",
+      "name": "Real Evidence Test User",
+      "session_token": "bfc0e1c3-add6-4fd4-9b49-b9fe9d4bf7fa",
+      "created_at": "2026-08-19T06:19:50.299728+00:00"
+    },
+    {
+      "_id": "cfabcd67-ff99-4d84-974e-010c22f2ae36",
+      "name": "Test Traveler",
+      "session_token": "9c46f6ec-07ed-464d-b26f-828f783bd4eb",
+      "created_at": "2026-08-19T06:33:59.255263+00:00"
+    },
+    {
+      "_id": "1a15003a-e1a0-4126-af3d-c22fbd1f9ba8",
+      "name": "Alice",
+      "session_token": "6e9d9492-a8b5-4b06-8f7c-67f45a24aad7",
+      "created_at": "2026-08-19T06:33:59.277678+00:00"
+    },
+    {
+      "_id": "cc73b184-fe37-4f0a-90d8-bfe5fce9fa41",
+      "name": "Bob",
+      "session_token": "f5fd7135-2e6c-470c-96b9-ebba1c49046a",
+      "created_at": "2026-08-19T06:33:59.316734+00:00"
     }
   ],
   "contacts": [
@@ -175,6 +205,30 @@
       "email": "parthnarang9may@gmail.com",
       "phone": "+1234567890",
       "created_at": "2026-08-19T05:48:03.823911+00:00"
+    },
+    {
+      "_id": "3725c6eb-c6b0-4541-a2ce-d90ca1e98589",
+      "user_id": "bd16ea9e-d185-4e78-91e7-a38da956f957",
+      "name": "Parent Contact",
+      "email": "parent@example.com",
+      "phone": "+1234567890",
+      "created_at": "2026-08-19T06:19:06.437465+00:00"
+    },
+    {
+      "_id": "f697f8fe-6a86-469c-b2ff-00d97954cafe",
+      "user_id": "63586b31-a1e0-4315-b015-1fe4c61a4a7c",
+      "name": "Parent",
+      "email": "parent@test.com",
+      "phone": "+1234567890",
+      "created_at": "2026-08-19T06:19:52.355976+00:00"
+    },
+    {
+      "_id": "98536305-5f80-48d2-85eb-ab676e208bb0",
+      "user_id": "cfabcd67-ff99-4d84-974e-010c22f2ae36",
+      "name": "Contact One",
+      "email": "c1@example.com",
+      "phone": "+12345",
+      "created_at": "2026-08-19T06:33:59.266536+00:00"
     }
   ],
   "trips": [
@@ -252,6 +306,36 @@
       "share_token": "947e0099-6b59-4a74-90ce-7b11130a5e57",
       "checkin_interval_ms": 900000,
       "started_at": "2026-08-19T05:52:15.675091+00:00"
+    },
+    {
+      "_id": "c8b95034-a770-449a-980d-895a0627ae4d",
+      "user_id": "bd16ea9e-d185-4e78-91e7-a38da956f957",
+      "origin": "Home",
+      "destination": "Office",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "expected_arrival": "2026-08-19T06:49:08.479252+00:00",
+      "status": "panic",
+      "share_token": "399afabd-d65d-4b44-aced-7f75ac4137c0",
+      "checkin_interval_ms": 900000,
+      "started_at": "2026-08-19T06:19:08.479241+00:00"
+    },
+    {
+      "_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
+      "user_id": "1a15003a-e1a0-4126-af3d-c22fbd1f9ba8",
+      "origin": "Library",
+      "destination": "Hostel",
+      "origin_lat": 28.6139,
+      "origin_lng": 77.209,
+      "dest_lat": 28.618,
+      "dest_lng": 77.215,
+      "expected_arrival": "2026-08-19T07:03:59.284370+00:00",
+      "status": "panic",
+      "share_token": "34b7d00c-28a6-42cb-96c1-422b2203cd31",
+      "checkin_interval_ms": 60000,
+      "started_at": "2026-08-19T06:33:59.284354+00:00"
     }
   ],
   "checkins": [
@@ -284,6 +368,46 @@
       "lat": 28.614,
       "lng": 77.2095,
       "created_at": "2026-08-19T05:42:22.641180+00:00"
+    },
+    {
+      "_id": "a7d102cd-2328-4892-a0d0-b6dfd4fd469a",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "manual",
+      "status": "safe",
+      "message": "[11:40:01 am] Can't.",
+      "lat": 30.251429593897882,
+      "lng": 77.04453201334994,
+      "created_at": "2026-08-19T06:10:01.978010+00:00"
+    },
+    {
+      "_id": "fe39b23b-b790-453c-b4a9-dd371aaae9e6",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "manual",
+      "status": "safe",
+      "message": "[11:42:45 am] MMM.",
+      "lat": 30.25150212885647,
+      "lng": 77.04444132778123,
+      "created_at": "2026-08-19T06:12:45.796295+00:00"
+    },
+    {
+      "_id": "53b780e6-d0f5-4115-93de-4baf0b7da964",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "manual",
+      "status": "safe",
+      "message": "[11:46:12 am] Sonia.",
+      "lat": 30.25144852460223,
+      "lng": 77.04447877018828,
+      "created_at": "2026-08-19T06:16:12.131583+00:00"
+    },
+    {
+      "_id": "bdfb1892-9b7e-471a-b633-e371b048df78",
+      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
+      "type": "manual",
+      "status": "safe",
+      "message": "I am safe but someone is following me",
+      "lat": 28.614,
+      "lng": 77.2095,
+      "created_at": "2026-08-19T06:33:59.291190+00:00"
     }
   ],
   "alerts": [
@@ -392,6 +516,73 @@
       "created_at": "2026-08-19T05:53:49.467796+00:00",
       "photo_url": "/uploads/photo_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.jpg",
       "evidence_url": "/uploads/evidence_541ff9ee-c3ea-4ef7-935b-46854b1a7808_1787118833.webm"
+    },
+    {
+      "_id": "7affbf08-c7bd-42c5-a194-98e80c42883a",
+      "trip_id": "c8b95034-a770-449a-980d-895a0627ae4d",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 28.61,
+      "lng": 77.2,
+      "created_at": "2026-08-19T06:19:10.536550+00:00",
+      "photo_url": "/uploads/photo_7affbf08-c7bd-42c5-a194-98e80c42883a_1787120352.jpg"
+    },
+    {
+      "_id": "66092a49-5d6f-49e8-8ef8-65842660b520",
+      "trip_id": "emergency",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "created_at": "2026-08-19T06:19:54.414809+00:00"
+    },
+    {
+      "_id": "001e0494-27ab-486b-8406-4410bcf30a07",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.25141569884547,
+      "lng": 77.0445302768449,
+      "created_at": "2026-08-19T06:20:54.318561+00:00",
+      "photo_url": "/uploads/photo_001e0494-27ab-486b-8406-4410bcf30a07_1787120454.jpg",
+      "evidence_url": "/uploads/evidence_001e0494-27ab-486b-8406-4410bcf30a07_1787120457.webm"
+    },
+    {
+      "_id": "62719cf5-9703-4544-b9a1-1b46cc660d0b",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.251458296039587,
+      "lng": 77.04446244771961,
+      "created_at": "2026-08-19T06:21:16.476435+00:00",
+      "photo_url": "/uploads/photo_62719cf5-9703-4544-b9a1-1b46cc660d0b_1787120476.jpg"
+    },
+    {
+      "_id": "18e4b0ea-7ee1-4bf6-a8a0-8048373adf64",
+      "trip_id": "6948a013-ff31-4e88-8ad1-b53e2ecec061",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 30.251458296039587,
+      "lng": 77.04446244771961,
+      "created_at": "2026-08-19T06:21:16.531046+00:00"
+    },
+    {
+      "_id": "8db78763-af00-4d83-bfcc-ca8b16272c42",
+      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
+      "type": "distress_message",
+      "severity": "high",
+      "lat": 28.614,
+      "lng": 77.2095,
+      "created_at": "2026-08-19T06:33:59.294976+00:00"
+    },
+    {
+      "_id": "f98c19b5-4869-45e9-bcc7-dea09717ecb8",
+      "trip_id": "2c95b4e1-a71d-4e37-8cbb-e9f11b9055c8",
+      "type": "panic",
+      "severity": "critical",
+      "lat": 28.615,
+      "lng": 77.21,
+      "created_at": "2026-08-19T06:33:59.309247+00:00"
     }
   ],
   "sent_emails": [
@@ -493,6 +684,94 @@
       "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
       "deliveredAt": "2026-08-19T05:53:53.584441+00:00",
       "_id": "d40f6f3e-5d72-41dd-a135-160a24598a41"
+    },
+    {
+      "to": "parent@example.com",
+      "contactName": "Parent Contact",
+      "subject": "URGENT EMERGENCY ALERT: Test User needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/c8b95034-a770-449a-980d-895a0627ae4d/status/399afabd-d65d-4b44-aced-7f75ac4137c0",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Panic Button Pressed",
+      "deliveredAt": "2026-08-19T06:19:10.538094+00:00",
+      "_id": "318690f2-4ff6-443e-9678-48dfe87ed374"
+    },
+    {
+      "to": "parent@example.com",
+      "contactName": "Parent Contact",
+      "subject": "URGENT EMERGENCY ALERT: Test User needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/c8b95034-a770-449a-980d-895a0627ae4d/status/399afabd-d65d-4b44-aced-7f75ac4137c0",
+      "photoUrl": "http://localhost:3001/uploads/photo_7affbf08-c7bd-42c5-a194-98e80c42883a_1787120352.jpg",
+      "audioUrl": null,
+      "spokenTranscript": "Emergency Photo & Audio Evidence Captured",
+      "deliveredAt": "2026-08-19T06:19:12.588661+00:00",
+      "_id": "1a38f9a0-c61f-4e58-a584-c192f604172b"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "[11:46:12 am] Sonia.",
+      "deliveredAt": "2026-08-19T06:20:54.321228+00:00",
+      "_id": "bd64b0d1-9cc5-4819-a619-0737fed40775"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": "http://localhost:3001/uploads/photo_001e0494-27ab-486b-8406-4410bcf30a07_1787120454.jpg",
+      "audioUrl": null,
+      "spokenTranscript": "[11:40:01 am] Can't.\n[11:42:45 am] MMM.\n[11:46:12 am] Sonia.",
+      "deliveredAt": "2026-08-19T06:20:54.358829+00:00",
+      "_id": "41f0fd90-7ad4-4cc3-a9b6-0631bac9c616"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": "http://localhost:3001/uploads/photo_001e0494-27ab-486b-8406-4410bcf30a07_1787120454.jpg",
+      "audioUrl": "http://localhost:3001/uploads/evidence_001e0494-27ab-486b-8406-4410bcf30a07_1787120457.webm",
+      "spokenTranscript": "[11:40:01 am] Can't.\n[11:42:45 am] MMM.\n[11:46:12 am] Sonia.",
+      "deliveredAt": "2026-08-19T06:20:57.918764+00:00",
+      "_id": "b68a735e-2bf7-47c8-b39f-62a1944c43ab"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "[AI THREAT REPORT - 11:51:16 am]\nDistress Keyword Triggered: \"HELP\"\nSpoken Sentence: \"HELP! Emergency situation!\"\nAI Threat Intensity: HIGH (0.98)\nGPS Coordinates: (30.251458, 77.044462)\nAction Taken: Auto-captured camera photo snapshot & dispatched emergency email to parents/contacts.",
+      "deliveredAt": "2026-08-19T06:21:16.479439+00:00",
+      "_id": "eaf5cc13-11be-4c86-b230-2f0ea3cb7ee5"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": "http://localhost:3001/uploads/photo_62719cf5-9703-4544-b9a1-1b46cc660d0b_1787120476.jpg",
+      "audioUrl": null,
+      "spokenTranscript": "[11:40:01 am] Can't.\n[11:42:45 am] MMM.\n[11:46:12 am] Sonia.",
+      "deliveredAt": "2026-08-19T06:21:16.510636+00:00",
+      "_id": "fa922a86-e144-4ae1-b32b-bffeed08649f"
+    },
+    {
+      "to": "parthnarang9may@gmail.com",
+      "contactName": "parth",
+      "subject": "URGENT EMERGENCY ALERT: Traveler needs immediate help!",
+      "shareLink": "http://localhost:5174/trip/6948a013-ff31-4e88-8ad1-b53e2ecec061/status/947e0099-6b59-4a74-90ce-7b11130a5e57",
+      "photoUrl": null,
+      "audioUrl": null,
+      "spokenTranscript": "[11:46:12 am] Sonia.",
+      "deliveredAt": "2026-08-19T06:21:16.536093+00:00",
+      "_id": "d0347b5a-7ded-44cd-bd79-2d2aaa9f0a1f"
     }
   ]
 }
