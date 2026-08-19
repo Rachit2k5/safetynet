@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "build": "node -e \"const fs=require('fs'); if(!fs.existsSync('public')) fs.mkdirSync('public'); fs.writeFileSync('public/index.html', '<!DOCTYPE html><html><body><h1>SafeRoute API Server</h1></body></html>');\"",
+    "build": "node -e \"const fs=require('fs'); const {execSync}=require('child_process'); if(fs.existsSync('../frontend')){execSync('npm run build --prefix ../frontend',{stdio:'inherit'}); if(fs.existsSync('../frontend/dist')){fs.cpSync('../frontend/dist','public',{recursive:true});}}else if(!fs.existsSync('public')){fs.mkdirSync('public');fs.writeFileSync('public/index.html','<!DOCTYPE html><html><body><h1>SafeRoute API Server</h1></body></html>');}\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "node src/db/seed.js"

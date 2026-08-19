@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node -e \"const fs=require('fs'); if(fs.existsSync('frontend')){require('child_process').execSync('npm run build --prefix frontend',{stdio:'inherit'})}else{require('child_process').execSync('npm run build',{stdio:'inherit'})}\""
+    "build": "node -e \"const fs=require('fs'); const {execSync}=require('child_process'); if(fs.existsSync('frontend')){execSync('npm run build --prefix frontend',{stdio:'inherit'}); if(fs.existsSync('frontend/dist')){fs.cpSync('frontend/dist','public',{recursive:true}); if(fs.existsSync('backend')) fs.cpSync('frontend/dist','backend/public',{recursive:true}); if(fs.existsSync('backend_fastapi')) fs.cpSync('frontend/dist','backend_fastapi/public',{recursive:true});}}else{execSync('npm run build',{stdio:'inherit'});}\""
   }
 }
