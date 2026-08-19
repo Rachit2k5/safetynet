@@ -5,6 +5,7 @@ import Profile from './pages/Profile';
 import TripView from './pages/TripView';
 import ContactView from './pages/ContactView';
 import RouteSelector from './pages/RouteSelector';
+import ParentPortal from './pages/ParentPortal';
 import PWAPrompt from './components/PWAPrompt';
 import OfflineBanner from './components/OfflineBanner';
 
@@ -58,6 +59,7 @@ export default function App() {
               <Route path="/trip/:id" element={<TripView />} />
               <Route path="/trip/:id/status/:shareToken" element={<ContactView />} />
               <Route path="/routes" element={<RouteSelector />} />
+              <Route path="/parent" element={<ParentPortal />} />
             </Routes>
 
             <PWAPrompt />

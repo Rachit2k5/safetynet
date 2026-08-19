@@ -139,17 +139,21 @@ export default function Dashboard() {
       </div>
 
       {/* Glassmorphic Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 px-6 py-3 flex justify-around items-center z-40">
-        <Link to="/" className="flex flex-col items-center gap-1 text-sr-info font-bold">
-          <span className="text-xl">📊</span>
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 px-4 py-2.5 flex justify-around items-center z-40">
+        <Link to="/" className="flex flex-col items-center gap-0.5 text-sr-info font-bold">
+          <span className="text-lg">📊</span>
           <span className="text-[10px]">Dashboard</span>
         </Link>
-        <Link to="/routes" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
-          <span className="text-xl">🗺️</span>
+        <Link to="/routes" className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-white transition-colors">
+          <span className="text-lg">🗺️</span>
           <span className="text-[10px]">Route AI</span>
         </Link>
-        <Link to="/profile" className="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-colors">
-          <span className="text-xl">👤</span>
+        <Link to="/parent" className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-cyan-400 transition-colors">
+          <span className="text-lg">🔒</span>
+          <span className="text-[10px] font-bold">Parent Portal</span>
+        </Link>
+        <Link to="/profile" className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-white transition-colors">
+          <span className="text-lg">👤</span>
           <span className="text-[10px]">Profile</span>
         </Link>
       </nav>

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
-import { apiGet, apiPost, apiDelete } from '../services/api';
+import { apiGet, apiPost, apiPut, apiDelete } from '../services/api';
 
 export default function Profile() {
   const { user, setUser } = useContext(UserContext);
@@ -203,6 +203,43 @@ export default function Profile() {
         ) : (
           <p className="text-xs text-amber-400 mt-2 text-center">Maximum limit of 3 trusted contacts reached.</p>
         )}
+      </div>
+
+      {/* Parent Portal Security PIN Settings */}
+      <div className="glass-card p-6 border border-slate-700/80 shadow-xl mb-6">
+        <h3 className="font-bold text-base text-white mb-1 flex items-center gap-2">
+          <span>🔒</span> Parent Portal Security PIN Settings
+        </h3>
+        <p className="text-xs text-slate-400 mb-4">
+          Set your parent's secret access PIN. Parents use this PIN to log into the protected Parent Portal to view your live GPS coordinates, camera photo snapshots, and video recordings in real time.
+        </p>
+
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          const val = e.target.elements.pinInput.value;
+          if (!val || val.length < 4) {
+            setError('Parent PIN must be at least 4 digits');
+            return;
+          }
+          try {
+            await apiPut('/api/users/me/parent-pin', { pin: val });
+            setSuccessMsg('✓ Parent Security PIN updated successfully!');
+            setTimeout(() => setSuccessMsg(''), 3000);
+          } catch (err) {
+            setError('Failed to update Parent PIN.');
+          }
+        }} className="flex gap-2">
+          <input
+            name="pinInput"
+            type="password"
+            placeholder="New Parent PIN (Default: 1234)"
+            className="flex-1 bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:ring-2 focus:ring-sr-info font-mono tracking-widest text-center"
+            required
+          />
+          <button type="submit" className="btn-info px-5 py-3 rounded-xl font-bold text-xs shadow-md whitespace-nowrap">
+            Save Parent PIN
+          </button>
+        </form>
       </div>
 
       {/* Emergency Email Dispatch Audit Log */}

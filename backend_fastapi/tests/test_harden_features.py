@@ -5,7 +5,8 @@ from app.main import app, db
 client = TestClient(app)
 
 def test_auth_register_and_login():
-    email = "harden_user@example.com"
+    import uuid
+    email = f"harden_user_{uuid.uuid4().hex[:8]}@example.com"
     password = "SecurePassword123!"
 
     # 1. Register
@@ -34,17 +35,23 @@ def test_auth_register_and_login():
     assert res_bad.status_code == 401
 
 def test_authorization_and_ownership_checks():
+    import uuid
+    u1_email = f"u1_{uuid.uuid4().hex[:8]}@example.com"
+    u2_email = f"u2_{uuid.uuid4().hex[:8]}@example.com"
+
     # User 1
     res_u1 = client.post("/api/auth/register", json={
-        "name": "User One", "email": "u1@example.com", "password": "Password123!"
+        "name": "User One", "email": u1_email, "password": "Password123!"
     })
+    assert res_u1.status_code == 201
     t1 = res_u1.json()["token"]
     u1_id = res_u1.json()["id"]
 
     # User 2
     res_u2 = client.post("/api/auth/register", json={
-        "name": "User Two", "email": "u2@example.com", "password": "Password123!"
+        "name": "User Two", "email": u2_email, "password": "Password123!"
     })
+    assert res_u2.status_code == 201
     t2 = res_u2.json()["token"]
     u2_id = res_u2.json()["id"]
 
@@ -111,3 +118,36 @@ def test_server_geocoding_police_stations_endpoint():
     data = res.json()
     assert "policeStations" in data
     assert "policeStationsCount" in data
+
+def test_parent_portal_auth_and_evidence_stream():
+    import uuid
+    email = f"child_{uuid.uuid4().hex[:8]}@example.com"
+    # 1. Register child user
+    res_reg = client.post("/api/auth/register", json={
+        "name": "Child Traveler", "email": email, "password": "Password123!"
+    })
+    token = res_reg.json()["token"]
+    user_id = res_reg.json()["id"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # 2. Set Parent PIN (e.g. 5678)
+    res_pin = client.put("/api/users/me/parent-pin", json={"pin": "5678"}, headers=headers)
+    assert res_pin.status_code == 200
+
+    # 3. Parent Login with wrong PIN -> 401
+    res_bad = client.post("/api/parent/login", json={"email": email, "pin": "9999"})
+    assert res_bad.status_code == 401
+
+    # 4. Parent Login with correct PIN -> 200
+    res_parent = client.post("/api/parent/login", json={"email": email, "pin": "5678"})
+    assert res_parent.status_code == 200
+    parent_token = res_parent.json()["parentToken"]
+
+    # 5. Fetch Parent Dashboard Stream
+    res_dash = client.get("/api/parent/dashboard", headers={"Authorization": f"Bearer {parent_token}"})
+    assert res_dash.status_code == 200
+    dash = res_dash.json()
+    assert "child" in dash
+    assert "evidenceVault" in dash
+    assert dash["child"]["name"] == "Child Traveler"
+
