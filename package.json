@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build"
+    "build": "node -e \"const fs=require('fs'); if(fs.existsSync('frontend')){require('child_process').execSync('npm run build --prefix frontend',{stdio:'inherit'})}else{require('child_process').execSync('npm run build',{stdio:'inherit'})}\""
   }
 }
