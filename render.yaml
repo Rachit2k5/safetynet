@@ -1,19 +1,18 @@
 services:
   - type: web
-    name: saferoute-backend
-    env: node
-    buildCommand: npm install
-    startCommand: npm start
+    name: saferoute
+    runtime: python
+    repo: https://github.com/Rachit2k5/safetynet
+    branch: main
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: cd backend_fastapi && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
     envVars:
-      - key: PORT
-        value: 10000
-      - key: NODE_ENV
-        value: production
-      - key: FRONTEND_URL
-        sync: false
-      - key: VAPID_PUBLIC_KEY
-        sync: false
-      - key: VAPID_PRIVATE_KEY
-        sync: false
-      - key: VAPID_SUBJECT
-        value: mailto:safety@saferoute.app
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: NODE_VERSION
+        value: "20"
+      - key: JWT_SECRET
+        value: "saferoute-super-secret-key-production-2026-secure-32bytes"
+      - key: RENDER
+        value: "1"

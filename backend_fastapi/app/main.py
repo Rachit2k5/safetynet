@@ -3,11 +3,13 @@ import uuid
 import time
 import bcrypt
 import jwt
+from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
 from fastapi import FastAPI, HTTPException, Header, Depends, WebSocket, WebSocketDisconnect, Request, Query
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr
@@ -874,3 +876,35 @@ async def websocket_endpoint(websocket: WebSocket, trip_id: str):
                         await ws.send_json({"type": "location:update", "data": data.get("data")})
     except WebSocketDisconnect:
         active_websockets[trip_id].remove(websocket)
+
+
+# --- Serve Frontend SPA (for Render / non-Vercel deployments) ---
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "static_frontend"
+
+if FRONTEND_DIR.exists() and FRONTEND_DIR.is_dir():
+    # Serve static assets (JS, CSS, images, etc.)
+    app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIR / "assets")), name="frontend_assets")
+
+    # Serve other static files at root (manifest, sw.js, etc.)
+    @app.get("/manifest.webmanifest")
+    @app.get("/sw.js")
+    @app.get("/workbox-{rest:path}")
+    async def serve_static_root_files(request: Request):
+        file_path = FRONTEND_DIR / request.url.path.lstrip("/")
+        if file_path.exists():
+            return FileResponse(str(file_path))
+        raise HTTPException(status_code=404)
+
+    # SPA catch-all — must be LAST route
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Don't intercept API or upload paths
+        if full_path.startswith("api/") or full_path.startswith("uploads/") or full_path.startswith("ws/"):
+            raise HTTPException(status_code=404)
+        # Try serving the exact file first
+        file_path = FRONTEND_DIR / full_path
+        if full_path and file_path.exists() and file_path.is_file():
+            return FileResponse(str(file_path))
+        # Fall back to index.html for SPA routing
+        return FileResponse(str(FRONTEND_DIR / "index.html"))
+
